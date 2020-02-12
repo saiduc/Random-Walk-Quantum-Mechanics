@@ -2,6 +2,7 @@ from lattice import Lattice
 import matplotlib.pyplot as plt
 
 lat_3d = Lattice(3)
+catch_prob = 0.1
 
 data = []
 for i in range(1000):
@@ -10,8 +11,11 @@ for i in range(1000):
     while not caught:
         time += 1
         lat_3d.move()
-        caught = lat_3d.caught(0.7)
+        caught = lat_3d.caught(0.1)
     data.append(time)
 
-plt.hist(data, 30)
+nbins = max(data) - 1
+hist = plt.hist(data, nbins)
+
+plt.xlabel('Time (no. of steps)')
 plt.show()
