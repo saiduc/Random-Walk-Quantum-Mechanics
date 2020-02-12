@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 class Lattice:
     """
@@ -13,12 +14,12 @@ class Lattice:
         """
         takes input directions array and adds to coordinates
         """
-        direction = np.random.randint(0, self.dimensions)
-        distance = np.random.choice([-1,1])
+        direction = random.randint(0, self.dimensions-1)
+        distance = random.choice([-1,1])
         
         self.coordinates[direction] += distance
 
     def caught(self, probability):
-        
-        
-        
+        dist = random.uniform(0,1)
+        if dist <= probability:
+            return True
