@@ -16,13 +16,9 @@ But the time is in seconds, so over many iterations, many random
 values are repeated
 */
 
-// set up random generators and define seeds for each
-random_device rd1;
-random_device rd2;
-random_device rd3;
-mt19937 generator1(rd1());
-mt19937 generator2(rd2());
-mt19937 generator3(rd3());
+// set up random generator and define seed for each
+random_device rd;
+mt19937 generator(rd());
 
 class Lattice {
 public:
@@ -47,10 +43,10 @@ public:
 	// int distance = rand()%2;
 
 	uniform_int_distribution<> distribution1(0,dimensions-1);
-	int direction = distribution1(generator1);
+	int direction = distribution1(generator);
 
 	uniform_int_distribution<> distribution2(0,1);
-	int distance = distribution2(generator2);
+	int distance = distribution2(generator);
 
 	// so that distance is always -1 or 1
 	if(distance == 0){
@@ -62,7 +58,7 @@ public:
   // caught function
     bool caught(double probability){
       uniform_real_distribution<double> distribution3(0.0,1.0);
-      double number = distribution3(generator3);
+      double number = distribution3(generator);
 
       if(number < probability){
 	  return true;
