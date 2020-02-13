@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <random>
+#include <fstream>
 
 using namespace std;
 
@@ -69,8 +70,11 @@ int main(){
     data.push_back(time);
   }
 
+  ofstream myfile;
+  myfile.open("data.dat");
   for(int i=0; i<data.size(); i++){
-    cout << data[i] << endl;
+    myfile << data[i] << "\n";
   }
-
+  myfile.close();
+  return 0;
 }
