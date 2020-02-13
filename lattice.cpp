@@ -45,7 +45,6 @@ public:
     bool caught(double probability){
       uniform_real_distribution<double> distribution(0.0,1.0);
       double number = distribution(generator);
-      cout << number << endl;
 
       if(number < probability){
 	  return true;
