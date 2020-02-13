@@ -3,33 +3,42 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
 
-lat_3d = Lattice(3)
-catch_prob = 0.1
 
-data = []
-for i in range(1000):
-    caught = False
-    time = 0
-    while not caught:
-        time += 1
-        lat_3d.move()
-        caught = lat_3d.caught(0.1)
-    data.append(time)
+def iterate(dimensions, catch_prob, number_iterations):
+    lattice = Lattice(dimensions)
 
-nbins = max(data) - 1
-hist = plt.hist(data, nbins, normed=True)
+    data = []
+    for i in range(number_iterations):
+        caught = False
+        time = 0
+        while not caught:
+            time += 1
+            lattice.move()
+            caught = lattice.caught(catch_prob)
+        data.append(time)
+
+    return data
 
 
-def fit(n, q, arrest):
+def func(n, q, arrest):
     return q * np.exp(-1 * arrest * n)
 
 
-x = hist[1][:-1]
-y = hist[0]
-popt, _ = curve_fit(fit, x, y)
+if __name__ == "__main__":
 
-plt.plot(x, fit(x, *popt), c='r')
+    data = iterate(3, 0.1, 1000)
 
+    nbins = max(data) - 1
+    hist = plt.hist(data, nbins, normed=True)
 
-plt.xlabel('Time (no. of steps)')
-plt.show()
+    x = hist[1][:-1]
+    y = hist[0]
+    popt, _ = curve_fit(func, x, y)
+
+    plt.style.use("seaborn")
+    plt.plot(x, func(x, *popt), c='r', label="Fitted Curve")
+
+    plt.ylabel('Probability')
+    plt.xlabel('Time Survived (no. of steps)')
+    plt.legend()
+    plt.show()
