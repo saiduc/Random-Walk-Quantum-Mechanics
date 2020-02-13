@@ -4,15 +4,19 @@
 #include <cstdio>
 #include <random>
 #include <fstream>
+// #include <ctime>
 
 using namespace std;
+
+// set up random generator and define seed
+random_device rd;
+mt19937 generator(rd());
 
 class Lattice {
 public:
     // variables
     int dimensions;
     vector<int> coordinates;
-    default_random_engine generator;
 
     // constructor
     Lattice(int d){
@@ -38,41 +42,51 @@ public:
     }
 
   // caught function
-  bool caught(double probability){
+    bool caught(double probability){
       uniform_real_distribution<double> distribution(0.0,1.0);
       double number = distribution(generator);
+      cout << number << endl;
 
       if(number < probability){
-	  // cout << "true" << endl;
 	  return true;
       }
-      // cout << "false" << endl;
       return false;
   }
 
 };
 
 int main(){
-    Lattice lattice(3);
+
+    srand(time(NULL));   
+
+    int dimen = 4;
+    Lattice lattice(dimen);
+    
     vector<int> data;
 
     // run the random walk
-    for(int i=0; i<1000000; i++){
+    for(int i=0; i<1000; i++){
 	bool caught = false;
 	int time = 0;
 	while(caught != true){
 	    time++;
 	    lattice.move();
+
 	    caught = lattice.caught(0.1);
 	}
 	// append to data
 	data.push_back(time);
     }
 
+    // for debugging 
+    // for(int i=0; i<data.size(); i++){
+    // 	cout << data[i] << "\n";
+    // }
+
     ofstream myfile;
     myfile.open("data.dat");
     for(int i=0; i<data.size(); i++){
-	myfile << data[i] << "\n";
+    	myfile << data[i] << "\n";
     }
     myfile.close();
     return 0;
