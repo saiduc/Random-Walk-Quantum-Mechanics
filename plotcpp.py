@@ -97,6 +97,7 @@ def line_plot(data):
 
 
 if __name__ == "__main__":
+    run_model()
     data = np.loadtxt("data.dat")
     prob_arrest_curve = exp_plot(data)
     prob_arrest_line = line_plot(data)
