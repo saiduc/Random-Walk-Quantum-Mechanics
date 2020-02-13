@@ -24,7 +24,7 @@ def exp_curve(n, q, arrest):
     return q * np.exp(-1 * arrest * n)
 
 
-def exp_plot(data):
+def exp_plot(data, show=True):
     nbins = max(data) - 1
     plt.style.use("seaborn")
 
@@ -34,16 +34,17 @@ def exp_plot(data):
     y = hist[0]
     popt, _ = curve_fit(exp_curve, x, y)
 
-    plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
+    if show:
+        plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
 
-    plt.ylabel('Probability')
-    plt.xlabel('Time Survived (no. of steps)')
-    plt.legend()
-    plt.show()
+        plt.ylabel('Probability')
+        plt.xlabel('Time Survived (no. of steps)')
+        plt.legend()
+        plt.show()
     return popt[1]
 
 
-def line_plot(data):
+def line_plot(data, show=True):
     nbins = max(data) - 1
     plt.style.use("seaborn")
 
@@ -54,18 +55,20 @@ def line_plot(data):
     y = hist[0]
     popt, _ = curve_fit(exp_curve, x, y)
 
-    plt.yscale("log")
-    plt.plot(x, y, marker='.', ls=' ')
-    plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
+    if show:
+        plt.yscale("log")
+        plt.plot(x, y, marker='.', ls=' ')
+        plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
 
-    plt.ylabel('Probability')
-    plt.xlabel('Time Survived (no. of steps)')
-    plt.legend()
-    plt.show()
+        plt.ylabel('Probability')
+        plt.xlabel('Time Survived (no. of steps)')
+        plt.legend()
+        plt.show()
     return popt[1]
 
 
 if __name__ == "__main__":
     data = iterate(3, 0.1, 1000)
-    prob_arrest_curve = exp_plot(data)
-    prob_arrest_line = line_plot(data)
+    prob_arrest_curve = exp_plot(data, show=False)
+    prob_arrest_line = line_plot(data, show=False)
+    print(prob_arrest_curve)
