@@ -29,13 +29,14 @@ if __name__ == "__main__":
     data = iterate(3, 0.1, 1000)
 
     nbins = max(data) - 1
+    plt.style.use("seaborn")
+
     hist = plt.hist(data, nbins, normed=True)
 
     x = hist[1][:-1]
     y = hist[0]
     popt, _ = curve_fit(func, x, y)
 
-    plt.style.use("seaborn")
     plt.plot(x, func(x, *popt), c='r', label="Fitted Curve")
 
     plt.ylabel('Probability')
