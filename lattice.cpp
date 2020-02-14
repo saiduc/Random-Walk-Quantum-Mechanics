@@ -14,6 +14,38 @@ using namespace std;
   And each use of rand seeds to time (not previous value like in python)
   But the time is in seconds, so over many iterations, many random
   values are repeated
+  <random> is recommended in C++ over using rand because rand is seeded with
+  time, but this is updated only every second. So if we were to for some
+  reason run the file several times within the same second, we would get
+  the exact same results.
+
+  <random> is also recommended over rand() since:
+
+  rand() is typically a low quality pRNG and not suitable for applications 
+  that need a reasonable level of unpredictability. <random> provides a 
+  variety of engines with different characteristics suitable for many 
+  different use cases.
+
+  Converting the results of rand() into a number you can use directly usually 
+  relies on code that is difficult to read and easy to get wrong, whereas 
+  using <random> distributions is easy and produces readable code.
+
+  The common methods of generating values in a given distribution using 
+  rand() further decrease the quality of the generated data. % generally biases 
+  the data and floating point division still produces non-uniform distributions. 
+  <random> distributions are higher quality as well as more readable.
+
+  rand() relies on a hidden global resource. Among other issues this causes 
+  rand() to not be thread safe. Some implementations make thread safety guarantees,
+  but this is not required standard. Engines provided by <random> encapsulate 
+  pRNG state as objects with value semantics, allowing flexible control over the state.
+
+  srand() only permits a limited range of seeds. Engines in <random> can be initialized 
+  using seed sequences which permit the maximum possible seed data. seed_seq also 
+  implements a common pRNG warm-up.
+  
+  from StackOverflow answer: 
+  https://stackoverflow.com/questions/18726102/what-difference-between-rand-and-random-functions
 */
 
 // set up random generator and define seed for each
