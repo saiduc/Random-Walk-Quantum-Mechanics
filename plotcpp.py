@@ -4,14 +4,14 @@ from scipy.optimize import curve_fit
 from subprocess import call
 
 
-def run_model():
-    print('compiling')
+def run_model(dimen, prob, iteration):
+    print('Compiling...')
     call(['g++', 'lattice.cpp', '-o', 'lattice'])
-    print('compilation successful')
+    print('Compilation successful!')
 
-    print('running model')
-    call(['./lattice'])
-    print('model complete')
+    print('Running model...')
+    call(['./lattice', str(dimen), str(prob), str(iteration)])
+    print('Model complete!')
 
 
 def exp_curve(n, q, arrest):
@@ -22,7 +22,7 @@ def exp_plot(data, show=True):
     nbins = int(max(data) - 1)
     plt.style.use("seaborn")
 
-    hist = plt.hist(data, nbins, normed=True)
+    hist = plt.hist(data, nbins, normed=True, align='mid')
 
     x = hist[1][:-1]
     y = hist[0]
@@ -54,7 +54,7 @@ def line_plot(data, show=True):
         plt.plot(x, y, marker='.', ls=' ')
         plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
 
-        plt.ylabel('Probability')
+        plt.ylabel('log(Probability)')
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
         plt.show()
@@ -99,8 +99,12 @@ def line_plot(data, show=True):
 
 
 if __name__ == "__main__":
-    run_model()
+    dimen = 3
+    prob = 0.1
+    iteration = 100000
+    
+    run_model(dimen, prob, iteration)
     data = np.loadtxt("data.dat")
-    prob_arrest_curve = exp_plot(data, show=False)
-    prob_arrest_line = line_plot(data, show=False)
+    prob_arrest_curve = exp_plot(data, show=True)
+    prob_arrest_line = line_plot(data, show=True)
     print(prob_arrest_curve)
