@@ -19,7 +19,17 @@ class Lattice:
         distance = random.choice([-1, 1])
         self.coordinates[direction] += distance
 
-    def caught(self, probability):
-        dist = random.uniform(0, 1)
-        if dist <= probability:
-            return True
+    def caught(self, probability=0.1, potential=None, boundary=None):
+
+        if potential is None:
+            dist = random.uniform(0, 1)
+            if dist <= probability:
+                return True
+            else:
+                return False
+
+        elif potential == "square":
+            for coordinate in self.coordinates:
+                if not (-1*boundary < coordinate < boundary):
+                    return True
+            return False
