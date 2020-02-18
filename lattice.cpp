@@ -5,6 +5,7 @@
 #include <random>
 #include <fstream>
 #include <ctime>
+#include <string>
 
 using namespace std;
 
@@ -68,6 +69,16 @@ public:
 		}
 	}
 
+	// resets lattice to start position
+	void reset(int d){
+		vector<int> coordinates_new;
+		dimensions = d;
+		for(int i=0; i<d; i++){
+			coordinates_new.push_back(0);
+		}
+		coordinates = coordinates_new;
+	}
+
 	// move function
 	void move(){
 		// int direction = rand()%dimensions;
@@ -87,17 +98,38 @@ public:
 	}
 
 	// caught function
-	bool caught(double probability){
-		uniform_real_distribution<double> distribution3(0.0,1.0);
-		double number = distribution3(generator);
+	bool caught(double probability=0.1, string potential="", int boundary=0){
 
-		if(number < probability){
-			return true;
+		if(potential == ""){
+			uniform_real_distribution<double> distribution3(0.0,1.0);
+			double number = distribution3(generator);
+			
+			if(number <= probability){
+				return true;
+			}
+			return false;
 		}
+
+		if(potential == "square"){
+			for(int i=0; i<coordinates.size(); i++){
+				if(!((coordinates[i] < boundary) && (coordinates[i] > (-1*boundary)))){
+					return true;
+				}
+			}
+			return false;
+		}
+
 		return false;
 	}
 
 };
+
+
+void printVector(vector<int> item){
+	for(int i=0; i<item.size(); i++){
+		cout << item[i] << endl;
+	}
+}
 
 int main(int argc, char* argv[]){
 	// to do, take command line arguments to decide number of iterations and probability
@@ -107,26 +139,31 @@ int main(int argc, char* argv[]){
 	srand(time(NULL));   
 
 	int dimen = atoi(argv[1]);
-	double probability = atof(argv[2]);
-	int iterations = atoi(argv[3]);
+	int iterations = atoi(argv[2]);
+	double probability = atof(argv[3]);
+	string potential = argv[4];
+	int boundary = atoi(argv[5]);
 
 	// cout << dimen << endl;
 	// cout << probability << endl;
 	// cout << iterations << endl;
 
-	// int dimen = 8;
 	Lattice lattice(dimen);
-    
+
+	
 	vector<int> data;
 
 	// run the random walk
 	for(int i=0; i<iterations; i++){
+		lattice.reset(dimen);
+
+
 		bool caught = false;
 		int time = 0;
 		while(caught != true){
 			time++;
 			lattice.move();
-			caught = lattice.caught(probability);
+			caught = lattice.caught(probability, potential, boundary);
 		}
 		// append to data
 		data.push_back(time);
