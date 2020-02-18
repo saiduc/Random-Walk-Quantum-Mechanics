@@ -4,17 +4,19 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 
-def iterate(dimensions, catch_prob, number_iterations):
+def iterate(dimensions, number_iterations, catch_prob=0.1, potential=None, boundary=None):
     lattice = Lattice(dimensions)
 
     data = []
     for i in range(number_iterations):
+        lattice = Lattice(dimensions)
         caught = False
         time = 0
-        while not caught:
+        while caught is False:
             time += 1
             lattice.move()
-            caught = lattice.caught(catch_prob)
+            caught = lattice.caught(
+                probability=catch_prob, potential=potential, boundary=boundary)
         data.append(time)
 
     return data
@@ -26,6 +28,7 @@ def exp_curve(n, q, arrest):
 
 def exp_plot(data, show=True):
     nbins = max(data) - 1
+    # nbins = 100
     plt.style.use("seaborn")
 
     hist = plt.hist(data, nbins, normed=True)
@@ -68,7 +71,8 @@ def line_plot(data, show=True):
 
 
 if __name__ == "__main__":
-    data = iterate(3, 0.1, 1000)
-    prob_arrest_curve = exp_plot(data, show=False)
-    prob_arrest_line = line_plot(data, show=False)
+    data = iterate(3, 100000, potential="square", boundary=3)
+    # data = iterate(3, 100000, catch_prob=0.1)
+    prob_arrest_curve = exp_plot(data, show=True)
+    prob_arrest_line = line_plot(data, show=True)
     print(prob_arrest_curve)
