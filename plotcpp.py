@@ -131,13 +131,17 @@ def cum_line_plot(data, show=True, skip=0, start=1):
 if __name__ == "__main__":
 
     dimen = 1
-    iteration = 1000000
-    maxSteps = 800
-
-    prob = 0.1
-
+    iteration = 100000
+    maxSteps = 300
     potential = "square"
-    boundary = 15
+    boundary = 8
+
+    # some good parameters
+    # dimen = 1
+    # iteration = 100000
+    # maxSteps = 300
+    # potential = "square"
+    # boundary = 8
 
     # Any point that has 1 item in the bin has y=1/nbins and nbins = iteration
     # So if there are 1000 iterations, the lower limit will be 1/1000
@@ -153,10 +157,10 @@ if __name__ == "__main__":
     if potential == "square":
         run_model(dimen, iteration, maxSteps=maxSteps, potential=potential, boundary=boundary)
         data = np.loadtxt("data.dat")
-        prob_arrest_curve = exp_plot(data, show=True, skip=0, start=boundary)
+        prob_arrest_curve = exp_plot(data, show=False, skip=0, start=boundary)
         prob_arrest_line = line_plot(data, show=False, skip=0, start=boundary)
-        prob_arrest_cum_curve = cum_exp_plot(data, show=True, skip=3, start=boundary)
-        prob_arrest_cum_line = cum_line_plot(data, show=True, skip=3, start=boundary)
+        prob_arrest_cum_curve = cum_exp_plot(data, show=False, skip=10, start=boundary)
+        prob_arrest_cum_line = cum_line_plot(data, show=False, skip=10, start=boundary)
 
         print(prob_arrest_cum_line * boundary**2)
         print(np.pi**2/8)
