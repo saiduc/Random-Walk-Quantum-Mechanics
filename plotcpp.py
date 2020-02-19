@@ -24,8 +24,8 @@ def exp_curve(n, q, arrest):
     return q * np.exp(-1 * arrest * n)
 
 
-def exp_plot(data, show=True, skip=False):
-    nbins = int(max(data) - 1)
+def exp_plot(data, show=True, skip=0, start=1):
+    nbins = int(max(data) - start)
     plt.style.use("seaborn")
 
     hist = plt.hist(data, nbins, normed=True, align='mid')
