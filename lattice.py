@@ -10,6 +10,7 @@ class Lattice:
     def __init__(self, dimensions):
         self.dimensions = dimensions
         self.coordinates = np.zeros(dimensions, dtype='int')
+        self.numberSteps = 0
 
     def move(self):
         """
@@ -18,18 +19,37 @@ class Lattice:
         direction = random.randint(0, self.dimensions-1)
         distance = random.choice([-1, 1])
         self.coordinates[direction] += distance
+        self.numberSteps += 1
 
-    def caught(self, probability=0.1, potential=None, boundary=None):
+    def caught(self, probability=0.1, potential=None, boundary=None, maxSteps=None):
 
-        if potential is None:
-            dist = random.uniform(0, 1)
-            if dist <= probability:
-                return True
-            else:
+        if maxSteps is None:
+            if potential is None:
+                dist = random.uniform(0, 1)
+                if dist <= probability:
+                    return True
+                else:
+                    return False
+
+            elif potential == "square":
+                for coordinate in self.coordinates:
+                    if not (-1*boundary < coordinate < boundary):
+                        return True
                 return False
 
-        elif potential == "square":
-            for coordinate in self.coordinates:
-                if not (-1*boundary < coordinate < boundary):
+        elif self.numberSteps < maxSteps:
+            if potential is None:
+                dist = random.uniform(0, 1)
+                if dist <= probability:
                     return True
-            return False
+                else:
+                    return False
+
+            elif potential == "square":
+                for coordinate in self.coordinates:
+                    if not (-1*boundary < coordinate < boundary):
+                        return True
+                return False
+
+        else:
+            return True

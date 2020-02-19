@@ -4,7 +4,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 
-def iterate(dimensions, number_iterations, catch_prob=0.1, potential=None, boundary=None):
+def iterate(dimensions, number_iterations, maxSteps = None, catch_prob=0.1, potential=None, boundary=None):
     lattice = Lattice(dimensions)
 
     data = []
@@ -15,8 +15,7 @@ def iterate(dimensions, number_iterations, catch_prob=0.1, potential=None, bound
         while caught is False:
             time += 1
             lattice.move()
-            caught = lattice.caught(
-                probability=catch_prob, potential=potential, boundary=boundary)
+            caught = lattice.caught(probability=catch_prob, potential=potential, boundary=boundary, maxSteps=maxSteps)
         data.append(time)
 
     return data
@@ -71,7 +70,7 @@ def line_plot(data, show=True):
 
 
 if __name__ == "__main__":
-    data = iterate(3, 100000, potential="square", boundary=3)
+    data = iterate(1, 1000, maxSteps=100, potential="square", boundary=8)
     # data = iterate(3, 100000, catch_prob=0.1)
     prob_arrest_curve = exp_plot(data, show=True)
     prob_arrest_line = line_plot(data, show=True)
