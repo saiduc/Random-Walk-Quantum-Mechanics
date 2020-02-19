@@ -56,11 +56,13 @@ class Lattice {
 public:
 	// variables
 	int dimensions;
+	int numberSteps;
 	vector<int> coordinates;
 
 	// constructor
 	Lattice(int d){
 		dimensions = d;
+		numberSteps = 0;
 
 		// fills coordinate array with zeros
 		// can probably be done with coordinates.assign(...)
@@ -73,10 +75,12 @@ public:
 	void reset(int d){
 		vector<int> coordinates_new;
 		dimensions = d;
+		numberSteps = 0;
 		for(int i=0; i<d; i++){
 			coordinates_new.push_back(0);
 		}
 		coordinates = coordinates_new;
+		// cout << "resetting" << endl;
 	}
 
 	// move function
@@ -95,31 +99,40 @@ public:
 			distance = -1;
 		}
 		coordinates[direction] = coordinates[direction] + distance;
+		numberSteps++;
+		// cout << numberSteps << endl;
 	}
 
 	// caught function
-	bool caught(double probability=0.1, string potential="", int boundary=0){
+	bool caught(double probability=0.1, string potential="", int boundary=0, int maxSteps=0){
 
-		if(potential == ""){
-			uniform_real_distribution<double> distribution3(0.0,1.0);
-			double number = distribution3(generator);
+		if((maxSteps == 0) || (numberSteps < maxSteps)){
+			if(potential == ""){
+				uniform_real_distribution<double> distribution3(0.0,1.0);
+				double number = distribution3(generator);
 			
-			if(number <= probability){
-				return true;
-			}
-			return false;
-		}
-
-		if(potential == "square"){
-			for(int i=0; i<coordinates.size(); i++){
-				if(!((coordinates[i] < boundary) && (coordinates[i] > (-1*boundary)))){
+				if(number <= probability){
 					return true;
 				}
+				return false;
 			}
+
+			if(potential == "square"){
+				for(int i=0; i<coordinates.size(); i++){
+					if(!((coordinates[i] < boundary) && (coordinates[i] > (-1*boundary)))){
+						return true;
+					}
+				}
+				return false;
+			}
+
 			return false;
 		}
 
-		return false;
+		else{
+			// cout << "hello3" << endl;
+			return true;
+		}
 	}
 
 };
@@ -140,13 +153,15 @@ int main(int argc, char* argv[]){
 
 	int dimen = atoi(argv[1]);
 	int iterations = atoi(argv[2]);
-	double probability = atof(argv[3]);
-	string potential = argv[4];
-	int boundary = atoi(argv[5]);
+	int maxSteps = atoi(argv[3]);
+	double probability = atof(argv[4]);
+	string potential = argv[5];
+	int boundary = atoi(argv[6]);
 
 	// cout << dimen << endl;
 	// cout << probability << endl;
 	// cout << iterations << endl;
+	// cout << maxSteps << endl;
 
 	Lattice lattice(dimen);
 
@@ -163,7 +178,7 @@ int main(int argc, char* argv[]){
 		while(caught != true){
 			time++;
 			lattice.move();
-			caught = lattice.caught(probability, potential, boundary);
+			caught = lattice.caught(probability, potential, boundary, maxSteps);
 		}
 		// append to data
 		data.push_back(time);
