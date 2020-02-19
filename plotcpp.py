@@ -47,15 +47,17 @@ def exp_plot(data, show=True, skip=0, start=1):
     return popt[1]
 
 
-def cum_exp_plot(data, show=True, start=1):
+def cum_exp_plot(data, show=True, skip=0, start=1):
     nbins = int(max(data) - start)
     plt.style.use("seaborn")
 
     hist = plt.hist(data, nbins, normed=True, align='mid')
     plt.clf()
 
-    x = hist[1][:-1]
-    y = hist[0]
+    x = hist[1][skip:-1]
+    y = hist[0][skip:]
+
+    print(x)
 
     # normalising it myself since normed=True doesn't seem to work
     # y = y/np.sum(y)
@@ -100,15 +102,15 @@ def line_plot(data, show=True, skip=0, start=1):
     return popt[1]
 
 
-def cum_line_plot(data, show=True, start=1):
+def cum_line_plot(data, show=True, skip=0, start=1):
     nbins = int(max(data) - start)
     plt.style.use("seaborn")
 
     hist = plt.hist(data, nbins, normed=True)
     plt.clf()
 
-    x = hist[1][:-1]
-    y = hist[0]
+    x = hist[1][skip:-1]
+    y = hist[0][skip:]
 
     cum_y = np.cumsum(y[::-1])[::-1]
 
@@ -129,13 +131,13 @@ def cum_line_plot(data, show=True, start=1):
 if __name__ == "__main__":
 
     dimen = 1
-    iteration = 10000
-    maxSteps = 100
+    iteration = 1000000
+    maxSteps = 800
 
     prob = 0.1
 
     potential = "square"
-    boundary = 8
+    boundary = 15
 
     # Any point that has 1 item in the bin has y=1/nbins and nbins = iteration
     # So if there are 1000 iterations, the lower limit will be 1/1000
@@ -153,8 +155,8 @@ if __name__ == "__main__":
         data = np.loadtxt("data.dat")
         prob_arrest_curve = exp_plot(data, show=True, skip=0, start=boundary)
         prob_arrest_line = line_plot(data, show=False, skip=0, start=boundary)
-        prob_arrest_cum_curve = cum_exp_plot(data, show=False, start=boundary)
-        prob_arrest_cum_line = cum_line_plot(data, show=False, start=boundary)
+        prob_arrest_cum_curve = cum_exp_plot(data, show=True, skip=3, start=boundary)
+        prob_arrest_cum_line = cum_line_plot(data, show=True, skip=3, start=boundary)
 
         print(prob_arrest_cum_line * boundary**2)
         print(np.pi**2/8)
