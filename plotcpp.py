@@ -29,7 +29,8 @@ def exp_curve(n, q, arrest):
 
 
 def exp_plot(data, show=True, skip=0, start=1):
-    nbins = int(max(data) - start)
+    # nbins = int(max(data) - start)
+    nbins = int(int(max(data) - start)/2)
     plt.style.use("seaborn")
 
     hist = plt.hist(data, nbins, normed=True, align='mid')
@@ -50,6 +51,7 @@ def exp_plot(data, show=True, skip=0, start=1):
 
 
 def cum_exp_plot(data, show=True, skip=0, start=1):
+    # nbins = int(max(data) - start)
     nbins = int(int(max(data) - start)/2)
     print(nbins)
     plt.style.use("seaborn")
@@ -64,11 +66,11 @@ def cum_exp_plot(data, show=True, skip=0, start=1):
     # y = y/np.sum(y)
     cum_y = np.cumsum(y[::-1])[::-1]
 
-    popt, _ = curve_fit(exp_curve, x, cum_y)
+    popt, _ = curve_fit(exp_curve, x, cum_y, p0=[1.28, 0.019])
 
     if show:
         # plt.plot(x, cum_y)
-        plt.bar(x, cum_y, width=1, align='center')
+        plt.bar(x, cum_y, width=2, align='center')
         plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
 
         plt.ylabel('Probability')
@@ -80,7 +82,8 @@ def cum_exp_plot(data, show=True, skip=0, start=1):
 
 
 def line_plot(data, show=True, skip=0, start=1):
-    nbins = int(max(data) - start)
+    # nbins = int(max(data) - start)
+    nbins = int(int(max(data) - start)/2)
     plt.style.use("seaborn")
 
     hist = plt.hist(data, nbins, normed=True)
@@ -132,14 +135,14 @@ def cum_line_plot(data, show=True, skip=0, start=1):
 
 def find_remove(data, maxNumber, show=True):
     N = maxNumber
-    if True:
-        val = []
-        x = range(N)
-        for num in x:
-            fit = cum_line_plot(data, show=False, skip=num, start=boundary)
-            val.append(fit)
-            plt.plot(x, val)
-            plt.show()
+    val = []
+    x = range(N)
+    for num in x:
+        fit = cum_line_plot(data, show=False, skip=num, start=boundary)
+        val.append(fit)
+    if show:
+        plt.plot(x, val)
+        plt.show()
     x = np.arange(0, N, 1)
     dx = x[1] - x[0]
     y = val
@@ -156,9 +159,9 @@ if __name__ == "__main__":
 
     dimen = 1
     iteration = 1000000
-    maxSteps = 100
+    maxSteps = 2000
     potential = "square"
-    boundary = 8
+    boundary = 20
     prob = 0.1
 
     # some good parameters
@@ -167,6 +170,13 @@ if __name__ == "__main__":
     # maxSteps = 300
     # potential = "square"
     # boundary = 8
+
+    # dimen = 1
+    # iteration = 1000000
+    # maxSteps = 2000
+    # potential = "square"
+    # boundary = 20
+    # prob = 0.1
 
     # Any point that has 1 item in the bin has y=1/nbins and nbins = iteration
     # So if there are 1000 iterations, the lower limit will be 1/1000
@@ -189,7 +199,10 @@ if __name__ == "__main__":
         prob_arrest_curve = exp_plot(data, show=True, skip=0, start=boundary)
         prob_arrest_line = line_plot(data, show=True, skip=0, start=boundary)
         prob_arrest_cum_curve = cum_exp_plot(data, show=True, skip=0, start=boundary)
-        prob_arrest_cum_line = cum_line_plot(data, show=True, skip=8, start=boundary)
+        prob_arrest_cum_line = cum_line_plot(data, show=True, skip=100, start=boundary)
 
         print(prob_arrest_cum_line * boundary**2)
         print(np.pi**2/8)
+
+        find_remove(data, 25)
+
