@@ -1,0 +1,27 @@
+#+TITLE: Random Walks for Quantum Mechanics
+#+AUTHOR: Sai Pandian
+
+* Usage
+Make sure there is gcc installed on your system and you can compile the
+lattice.cpp file with:
+#+begin_src bash
+gcc lattice.cpp -o lattice
+#+end_src
+
+For this reason, this code will probably not run on non-Unix systems.
+
+If this compiles fine, then the Python file will execute correctly. The
+plotcpp.py file is the main data analysis file. It will also automatically
+execute the C++ file, so there is no need for you to compile and execute the
+file yourself.
+
+* Requirements
+- Linux or MacOS system (untested on Windows)
+- GCC Compiler
+- C++ 11 or higher
+- Matplotlib Python module
+- NumPy Python module
+- SciPy Python module
+
+* License
+* Acknowledgements
