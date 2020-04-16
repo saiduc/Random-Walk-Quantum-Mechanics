@@ -31,7 +31,9 @@ def exp_curve(n, q, arrest):
 def exp_plot(data, show=True, skip=0, start=1):
     # nbins = int(max(data) - start)
     nbins = int(int(max(data) - start)/2)
-    plt.style.use("seaborn")
+    # plt.style.use("seaborn")
+    plt.rc('text', usetex=True)
+    plt.rc('font', family='serif')
 
     hist = plt.hist(data, nbins, normed=True, align='mid')
 
@@ -41,7 +43,7 @@ def exp_plot(data, show=True, skip=0, start=1):
     popt, _ = curve_fit(exp_curve, x, y)
 
     if show:
-        plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
+        # plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
 
         plt.ylabel('Probability')
         plt.xlabel('Time Survived (no. of steps)')
@@ -53,8 +55,9 @@ def exp_plot(data, show=True, skip=0, start=1):
 def cum_exp_plot(data, show=True, skip=0, start=1):
     # nbins = int(max(data) - start)
     nbins = int(int(max(data) - start)/2)
-    print(nbins)
-    plt.style.use("seaborn")
+    # plt.style.use("seaborn")
+    plt.rc('text', usetex=True)
+    plt.rc('font', family='serif')
 
     hist = plt.hist(data, nbins, normed=True, align='mid')
     plt.clf()
@@ -84,7 +87,9 @@ def cum_exp_plot(data, show=True, skip=0, start=1):
 def line_plot(data, show=True, skip=0, start=1):
     # nbins = int(max(data) - start)
     nbins = int(int(max(data) - start)/2)
-    plt.style.use("seaborn")
+    # plt.style.use("seaborn")
+    plt.rc('text', usetex=True)
+    plt.rc('font', family='serif')
 
     hist = plt.hist(data, nbins, normed=True)
     plt.clf()
@@ -97,7 +102,7 @@ def line_plot(data, show=True, skip=0, start=1):
     if show:
         plt.yscale("log")
         plt.plot(x, y, marker='.', ls=' ')
-        plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
+        # plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
 
         plt.ylabel('log(Probability)')
         plt.xlabel('Time Survived (no. of steps)')
@@ -108,8 +113,9 @@ def line_plot(data, show=True, skip=0, start=1):
 
 def cum_line_plot(data, show=True, skip=0, start=1):
     nbins = int(int(max(data) - start)/2)
-    print(nbins)
-    plt.style.use("seaborn")
+    # plt.style.use("seaborn")
+    plt.rc('text', usetex=True)
+    plt.rc('font', family='serif')
 
     hist = plt.hist(data, nbins, normed=True)
     plt.clf()
@@ -159,7 +165,7 @@ if __name__ == "__main__":
 
     dimen = 1
     iteration = 1000000
-    maxSteps = 2000
+    maxSteps = 0
     potential = "square"
     boundary = 20
     prob = 0.1
@@ -198,11 +204,27 @@ if __name__ == "__main__":
         data = np.loadtxt("data.dat")
         prob_arrest_curve = exp_plot(data, show=True, skip=0, start=boundary)
         prob_arrest_line = line_plot(data, show=True, skip=0, start=boundary)
-        prob_arrest_cum_curve = cum_exp_plot(data, show=True, skip=0, start=boundary)
+        prob_arrest_cum_curve = cum_exp_plot(data, show=True, skip=100, start=boundary)
         prob_arrest_cum_line = cum_line_plot(data, show=True, skip=100, start=boundary)
 
         print(prob_arrest_cum_line * boundary**2)
         print(np.pi**2/8)
 
-        find_remove(data, 25)
+        if True:
+            values = []
+            for i in range(10):
+                run_model(dimen,
+                        iteration,
+                        maxSteps=maxSteps,
+                        potential=potential,
+                        boundary=boundary)
+                data = np.loadtxt("data.dat")
+                prob_arrest_cum_line = cum_line_plot(data, show=False, skip=100, start=boundary)
+                print(prob_arrest_cum_line * boundary**2)
+                values.append(prob_arrest_cum_line * boundary**2)
+
+            gradient = np.average(values)
+            error = np.std(values)
+            print(gradient, " ± ", error)
+            
 
