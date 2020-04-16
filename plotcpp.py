@@ -49,6 +49,7 @@ def exp_plot(data, show=True, skip=0, start=1):
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
         plt.show()
+        plt.savefig("./Paper/images/exp_plot.pdf")
     return popt[1]
 
 
@@ -80,6 +81,7 @@ def cum_exp_plot(data, show=True, skip=0, start=1):
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
         plt.show()
+        plt.savefig("./Paper/images/cum_exp_plot.pdf")
 
     return popt[1]
 
@@ -108,6 +110,7 @@ def line_plot(data, show=True, skip=0, start=1):
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
         plt.show()
+        plt.savefig("./Paper/images/line_plot.pdf")
     return popt[1]
 
 
@@ -136,29 +139,8 @@ def cum_line_plot(data, show=True, skip=0, start=1):
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
         plt.show()
+        plt.savefig("./Paper/images/cum_line_plot.pdf")
     return popt[1]
-
-
-def find_remove(data, maxNumber, show=True):
-    N = maxNumber
-    val = []
-    x = range(N)
-    for num in x:
-        fit = cum_line_plot(data, show=False, skip=num, start=boundary)
-        val.append(fit)
-    if show:
-        plt.plot(x, val)
-        plt.show()
-    x = np.arange(0, N, 1)
-    dx = x[1] - x[0]
-    y = val
-    dydx = np.gradient(y, dx)
-
-    if show:
-        plt.plot(x[:-1], dydx[:-1], ls="", marker='o')
-        popt, _ = curve_fit(exp_curve, x, dydx)
-        plt.plot(x, exp_curve(x, *popt))
-        plt.show()
 
 
 if __name__ == "__main__":
