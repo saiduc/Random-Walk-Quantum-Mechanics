@@ -1,23 +1,33 @@
 #+TITLE: Random Walks for Quantum Mechanics
 #+AUTHOR: Sai Pandian
 
+This repository hosts my project for the PHYS6017 Computer Techniques in Physics
+module, which I completed as part of my MPhys Astrophysics degree. The project
+entailed using Random Walk Monte Carlo simulations to determine the ground state
+energy of different Quantum systems.
+
+The project was completed using a combination of C++ and Python. The C++ was
+used for the simulation itself as the program had to be highly
+performant. Python is used for data analysis since it has better data analysis
+libraries.
+
 * Usage
-Make sure there is gcc installed on your system and you can compile the
-lattice.cpp file with:
+Make sure g++ is installed on your system and you can compile the lattice.cpp
+file with:
 #+begin_src bash
-gcc lattice.cpp -o lattice
+g++ lattice.cpp -o lattice
 #+end_src
 
 For this reason, this code will probably not run on non-Unix systems.
 
 If this compiles fine, then the Python file will execute correctly. The
 plotcpp.py file is the main data analysis file. It will also automatically
-execute the C++ file, so there is no need for you to compile and execute the
-file yourself.
+compile and execute the C++ file, so there is no need for you to compile and
+execute the file yourself.
 
 * Requirements
 - Linux or MacOS system (untested on Windows)
-- GCC Compiler
+- G++ Compiler
 - C++ 11 or higher
 - Matplotlib Python module
 - NumPy Python module
