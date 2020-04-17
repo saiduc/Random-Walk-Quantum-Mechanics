@@ -6,6 +6,7 @@
 #include <fstream>
 #include <ctime>
 #include <string>
+#include <cmath>
 
 using namespace std;
 
@@ -126,6 +127,18 @@ public:
 				return false;
 			}
 
+			if(potential == "circle"){
+				double tmp = 0;
+				for(int i=0; i<coordinates.size(); i++){
+					tmp = tmp + (coordinates[i] * coordinates[i]);
+				}
+				tmp = sqrt(tmp);
+				if(!(tmp < boundary)){
+					return true;
+				}
+				return false;
+			}
+			
 			else{
 				return false;
 			}
