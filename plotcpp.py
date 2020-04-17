@@ -48,8 +48,8 @@ def exp_plot(data, show=True, skip=0, start=1):
         plt.ylabel('Probability')
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
-        plt.show()
         plt.savefig("./Paper/images/exp_plot.pdf")
+        plt.show()
     return popt[1]
 
 
@@ -80,8 +80,8 @@ def cum_exp_plot(data, show=True, skip=0, start=1):
         plt.ylabel('Probability')
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
-        plt.show()
         plt.savefig("./Paper/images/cum_exp_plot.pdf")
+        plt.show()
 
     return popt[1]
 
@@ -109,8 +109,8 @@ def line_plot(data, show=True, skip=0, start=1):
         plt.ylabel('log(Probability)')
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
-        plt.show()
         plt.savefig("./Paper/images/line_plot.pdf")
+        plt.show()
     return popt[1]
 
 
@@ -138,8 +138,8 @@ def cum_line_plot(data, show=True, skip=0, start=1):
         plt.ylabel('log(Probability)')
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
-        plt.show()
         plt.savefig("./Paper/images/cum_line_plot.pdf")
+        plt.show()
     return popt[1]
 
 
@@ -147,7 +147,7 @@ if __name__ == "__main__":
 
     dimen = 1
     iteration = 1000000
-    maxSteps = 0
+    maxSteps = 2000
     potential = "square"
     boundary = 20
     prob = 0.1
