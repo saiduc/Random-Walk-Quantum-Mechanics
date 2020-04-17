@@ -119,8 +119,25 @@ position $j$. If we say:
 where $q(j)$ is an arbitrary function and $\lambda$ is the rate of death, then:
 \begin{equation}
   -\frac{1}{2} \frac{d^2q(j)}{dj^2} + a(j)q(j) = \lambda q(j)
-  \nonumber
+  \label{eq:randomwave}
 \end{equation}
+
+The full derivation is taken from \todo{cite} and is shown in Appendix
+\ref{appendix:derivation}.
+
+Notice that Equation \ref{eq:randomwave} is in the form of a wave equation,
+specifically the Schr\"{o}dinger equation:
+\begin{equation}
+  \label{eq:schrodinger}
+  \frac{-\hbar^2}{2m}\frac{d^2 \psi}{dr^2} + V(r)\psi(r) = E\psi(r)
+\end{equation}
+Comparing Equation \ref{eq:randomwave} and Equation \ref{eq:schrodinger}, we can
+see that the probability of death $a(j)$ is analogous to the potential $V(r)$,
+and the rate of death $\lambda$ is analogous to the Energy $E$. Thus, by running
+the simulation for a particulat potential (i.e. rate of death), one can
+determine the ground state energy of a system by calculating the rate of
+death. This is the technique employed in this paper.
+
 
 \section{Results and Discussion}
 
@@ -193,6 +210,7 @@ Sample Text
 
 \appendices
 \section{Random Walk Schr\"{o}dinger Equation Derivation}
+\label{appendix:derivation}
 Let us denote the probability that the walker is at position $j$ after $n$ steps
 as $p(j,n)$ and the probabilty that the walker will die at position $j$ as
 $a(j)$. We will denote the position-step number coordinates as $[j, n]$. Thus,
@@ -235,19 +253,13 @@ find:
 But the probability of death $a(j)$ and the second derivative are so small, that
 their product is neglected. We also let $p(j,n) = q(j) exp(-\lambda n)$ so that:
 
-
 \begin{equation}
-  item
+  -\frac{1}{2} \frac{d^2q(j)}{dj^2} + a(j)q(j) = \lambda q(j)
   \nonumber
 \end{equation}
 
-% use section* for acknowledgment
-\section*{Acknowledgment}
-The authors would like to thank...
-
 \printbibliography
 
-% that's all folks
 \end{document}
 
 
