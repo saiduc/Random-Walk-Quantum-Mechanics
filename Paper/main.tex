@@ -35,18 +35,18 @@
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract}
-Provide a summary of the session. What was done, what measurements were taken,
-brief methods, what calculations, brief conclusion.  The Abstract should be
-approximately 250 words or fewer, italicized, in 10-point Times (or Times
-Roman.) Please leave two spaces between the Abstract and the heading of your
-first section.  It should briefly summarize the essence of the paper and address
-the following areas without using specific subsection titles. Objective: Briefly
-state the problem or issue addressed, in language accessible to a general
-scientific audience. Technology or Method: Briefly summarize the technological
-innovation or method used to address the problem. Results: Provide a brief
-summary of the results and findings. Conclusions: Give brief concluding remarks
-on your outcomes. Detailed discussion of these aspects should be provided in the
-main body of the paper.
+% Provide a summary of the session. What was done, what measurements were taken,
+% brief methods, what calculations, brief conclusion.  The Abstract should be
+% approximately 250 words or fewer, italicized, in 10-point Times (or Times
+% Roman.) Please leave two spaces between the Abstract and the heading of your
+% first section.  It should briefly summarize the essence of the paper and address
+% the following areas without using specific subsection titles. Objective: Briefly
+% state the problem or issue addressed, in language accessible to a general
+% scientific audience. Technology or Method: Briefly summarize the technological
+% innovation or method used to address the problem. Results: Provide a brief
+% summary of the results and findings. Conclusions: Give brief concluding remarks
+% on your outcomes. Detailed discussion of these aspects should be provided in the
+% main body of the paper.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -68,6 +68,7 @@ how Random Walk Simulations can be implemented to calculate the ground state
 energies of different quantum systems. \todo{more}
 
 \section{Theoretical Background}
+\label{sec:TheoreticalBackground}
 
 Random walks work descibe motion as a series of steps, with the direction of
 each step being random. Figure \ref{fig:cartoon} demonstrates this concept by
@@ -113,8 +114,8 @@ $j$ after $n$ steps and $a(j)$ as the probability that the walker will die at
 position $j$. If we say:
 
 \begin{equation}
-  p(j,n) = q(j) exp(-\lambda n)
-  \nonumber
+  p(j,n) = q(j) \exp(-\lambda n)
+  \label{eq:firsteq}
 \end{equation}
 where $q(j)$ is an arbitrary function and $\lambda$ is the rate of death, then:
 \begin{equation}
@@ -132,11 +133,96 @@ specifically the Schr\"{o}dinger equation:
   \frac{-\hbar^2}{2m}\frac{d^2 \psi}{dr^2} + V(r)\psi(r) = E\psi(r)
 \end{equation}
 Comparing Equation \ref{eq:randomwave} and Equation \ref{eq:schrodinger}, we can
-see that the probability of death $a(j)$ is analogous to the potential $V(r)$,
-and the rate of death $\lambda$ is analogous to the Energy $E$. Thus, by running
-the simulation for a particulat potential (i.e. rate of death), one can
+see that the probability of death $a(j)$ is related to the potential $V(r)$,
+and the rate of death $\lambda$ is related to the Energy $E$. Thus, by running
+the simulation for a particular potential (i.e. rate of death), one can
 determine the ground state energy of a system by calculating the rate of
 death. This is the technique employed in this paper.
+
+\section{Method}
+
+The Random Walk is implemented computationally \todo{cite} and is extensible
+to multiple dimensions. For a $N$-dimensional lattice, at each point there are
+$2N$ possible directions for the walker to move. So a direction is selected
+randomly using a Mersenne Twister pseudorandom number generator (pRNG). This algorithm
+was chosen as it is a very fast implementation of a pRNG \todo{cite} and it
+passes many statistical randomness tests \todo{cite}, having a very large
+period of $2^{19937-1}$.
+
+The random walk ends when a walker dies, with a
+specifically chosen $a(j)$. Initially, the $a(j)$ is chosen to be that of an
+infinite square well, that is:
+\begin{equation}
+  \label{eq:squarewell}
+    a(j) =
+    \begin{cases}
+      0,& \text{if } j < J\\
+      \infty,& \text{if } j \geq J
+    \end{cases}
+    \nonumber
+\end{equation}
+where J is a well-defined boundary. So the walker has no chance of dying whilst
+within the well, but will die immediately once reaching the boundary. As
+explained in Section \ref{sec:TheoreticalBackground}, we expect that given
+sufficient time, all the walkers will reach the boundary and die. But in order
+to save computational resources, a maximum number of steps may also be defined,
+such that a walker will also die should they move that number of steps without
+reaching a boundary. This was not initially implemented, as it can introduce
+systemic errors, since there would be a disproportionate number of walkers dying
+on the maximum number of steps.
+
+Thus, the Schr\"{o}dinger equation inside a one-dimensional infinite square well
+is simply that of a free particle:
+\begin{equation}
+  \frac{-\hbar^2}{2m}\frac{d^2 \psi}{dx^2} = E\psi(x)
+  \nonumber
+\end{equation}
+where $x$ is the position of the walker. By making the substitution $x = J
+\times j/R$, such that $j=R$ corresponds to the walker being at the boundary, we
+obtain:
+\begin{equation}
+  \begin{split}
+    -\frac{\hbar^2}{2m}\frac{R^2}{J^2}\frac{d^2\psi}{dj^2} &= E\psi(x)\\
+    -\frac{1}{2}\frac{d^2\psi}{dj^2} &= \frac{mJ^2E}{\hbar^2R^2}\psi(x)
+  \end{split}
+  \nonumber
+\end{equation}
+
+If we compare this to Equation \ref{eq:randomwave}, allowing $a(j) = 0$, we see
+that:
+\begin{equation}
+  \begin{split}
+    \lambda &= \frac{mJ^2E}{\hbar^2R^2} \\
+    E &= \lambda R^2 \frac{\hbar^2}{mJ^2}
+  \end{split}
+  \nonumber
+\end{equation}
+
+So, by calculating the death rate $\lambda$, we can find the ground state energy
+of a particle in an infinite square well.
+
+But the known ground state of a particle in an infinite square well is
+$\frac{\pi^2}{8}\frac{\hbar^2}{mJ^2}$. This implies that we expect $\lambda
+R^2=\frac{\pi^2}{8}$ where R is the boundary of the well. Thus, we expect to
+find a $\lambda$ that is close to this theoretical value.
+
+
+To find the rate of death $\lambda$, we consider Equation \ref{eq:firsteq}. With
+some simple manipulation:
+\begin{equation}
+  \begin{split}
+    p(j, n) & = q(j) \exp(-\lambda n)\\
+    \log(p) & = \log(q \exp(-\lambda n)) \\
+    \log(p) & = -\lambda n + log(q)
+  \end{split}
+  \nonumber
+\end{equation}
+Thus, by plotting the logarithm of the probability of surviving $n$ steps
+against the number of steps $n$, we can obtain the death rate $\lambda$ from the
+gradient.
+
+Varying the boundary $J$ of the square well will affect the accuracy of the
+final answer, and this is investigated here.
 
 
 \section{Results and Discussion}
@@ -251,7 +337,7 @@ find:
 \end{equation}
 
 But the probability of death $a(j)$ and the second derivative are so small, that
-their product is neglected. We also let $p(j,n) = q(j) exp(-\lambda n)$ so that:
+their product is neglected. We also let $p(j,n) = q(j) \exp(-\lambda n)$ so that:
 
 \begin{equation}
   -\frac{1}{2} \frac{d^2q(j)}{dj^2} + a(j)q(j) = \lambda q(j)
