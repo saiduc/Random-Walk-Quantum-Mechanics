@@ -45,7 +45,7 @@ def exp_plot(data, show=True, skip=0, start=1):
     if show:
         # plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
 
-        plt.ylabel('Probability')
+        plt.ylabel('Probability of Death')
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
         plt.savefig("./Paper/images/exp_plot.pdf")
@@ -77,7 +77,7 @@ def cum_exp_plot(data, show=True, skip=0, start=1):
         plt.bar(x, cum_y, width=2, align='center')
         plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
 
-        plt.ylabel('Probability')
+        plt.ylabel('Probability of Survival')
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
         plt.savefig("./Paper/images/cum_exp_plot.pdf")
@@ -106,7 +106,7 @@ def line_plot(data, show=True, skip=0, start=1):
         plt.plot(x, y, marker='.', ls=' ')
         # plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
 
-        plt.ylabel('log(Probability)')
+        plt.ylabel('log(Probability of Death)')
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
         plt.savefig("./Paper/images/line_plot.pdf")
@@ -135,7 +135,7 @@ def cum_line_plot(data, show=True, skip=0, start=1):
         plt.plot(x, cum_y, marker='.', ls=' ')
         plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
 
-        plt.ylabel('log(Probability)')
+        plt.ylabel('log(Probability of Survival)')
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
         plt.savefig("./Paper/images/cum_line_plot.pdf")
