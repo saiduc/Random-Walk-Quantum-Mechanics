@@ -60,7 +60,7 @@ def cum_exp_plot(data, show=True, skip=0, start=1):
     plt.rc('text', usetex=True)
     plt.rc('font', family='serif')
 
-    hist = plt.hist(data, nbins, normed=True, align='mid')
+    hist = plt.hist(data, nbins, normed=False, align='mid')
     plt.clf()
 
     x = hist[1][skip:-1]
@@ -69,8 +69,9 @@ def cum_exp_plot(data, show=True, skip=0, start=1):
     # normalising it myself since normed=True doesn't seem to work
     # y = y/np.sum(y)
     cum_y = np.cumsum(y[::-1])[::-1]
+    cum_y = cum_y/max(cum_y)
 
-    popt, _ = curve_fit(exp_curve, x, cum_y, p0=[1.28, 0.019])
+    popt, pcov = curve_fit(exp_curve, x, cum_y, p0=[1.28, 0.019])
 
     if show:
         # plt.plot(x, cum_y)
@@ -80,8 +81,15 @@ def cum_exp_plot(data, show=True, skip=0, start=1):
         plt.ylabel('Probability of Survival')
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
-        # plt.savefig("./Paper/images/cum_exp_plot.pdf")
+        plt.savefig("./Paper/images/cum_exp_plot.pdf")
         plt.show()
+
+    residuals = cum_y - exp_curve(x, *popt)
+    ss_res = np.sum(residuals**2)
+    ss_tot = np.sum((cum_y-np.mean(cum_y))**2)
+    r_squared = 1 - (ss_res / ss_tot)
+    print("R^2 value is: ", r_squared)
+    print("Gradient is: ", popt[1], " ± ", pcov[1])
 
     return popt[1]
 
@@ -128,7 +136,7 @@ def cum_line_plot(data, show=True, skip=0, start=1):
 
     cum_y = np.cumsum(y[::-1])[::-1]
 
-    popt, _ = curve_fit(exp_curve, x, cum_y, p0=[1.28, 0.019])
+    popt, pcov = curve_fit(exp_curve, x, cum_y, p0=[1.28, 0.019])
 
     if show:
         plt.yscale("log")
@@ -140,6 +148,14 @@ def cum_line_plot(data, show=True, skip=0, start=1):
         plt.legend()
         # plt.savefig("./Paper/images/cum_line_plot.pdf")
         plt.show()
+
+    residuals = cum_y - exp_curve(x, *popt)
+    ss_res = np.sum(residuals**2)
+    ss_tot = np.sum((cum_y-np.mean(cum_y))**2)
+    r_squared = 1 - (ss_res / ss_tot)
+    print("R^2 value is: ", r_squared)
+    print("Gradient is: ", popt[1], " ± ", pcov[1])
+
     return popt[1]
 
 
@@ -147,7 +163,7 @@ if __name__ == "__main__":
 
     dimen = 1
     iteration = 1000000
-    maxSteps = 2000
+    maxSteps = 0
     potential = "square"
     boundary = 20
     prob = 0.1
@@ -265,7 +281,7 @@ if __name__ == "__main__":
 
                 plt.yscale("log")
                 plt.plot(alldataX[i], cum_y, marker='.', ls=' ', label=label)
-                plt.plot(alldataX[i], exp_curve(alldataX[i], *popt), c='r')
+                plt.plot(alldataX[i], exp_curve(alldataX[i], *popt), c='k')
 
             plt.ylabel('log(Probability of Survival)')
             plt.xlabel('Time Survived (no. of steps)')
