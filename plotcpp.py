@@ -48,7 +48,7 @@ def exp_plot(data, show=True, skip=0, start=1):
         plt.ylabel('Probability of Death')
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
-        plt.savefig("./Paper/images/exp_plot.pdf")
+        # plt.savefig("./Paper/images/exp_plot.pdf")
         plt.show()
     return popt[1]
 
@@ -80,7 +80,7 @@ def cum_exp_plot(data, show=True, skip=0, start=1):
         plt.ylabel('Probability of Survival')
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
-        plt.savefig("./Paper/images/cum_exp_plot.pdf")
+        # plt.savefig("./Paper/images/cum_exp_plot.pdf")
         plt.show()
 
     return popt[1]
@@ -109,7 +109,7 @@ def line_plot(data, show=True, skip=0, start=1):
         plt.ylabel('log(Probability of Death)')
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
-        plt.savefig("./Paper/images/line_plot.pdf")
+        # plt.savefig("./Paper/images/line_plot.pdf")
         plt.show()
     return popt[1]
 
@@ -138,7 +138,7 @@ def cum_line_plot(data, show=True, skip=0, start=1):
         plt.ylabel('log(Probability of Survival)')
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
-        plt.savefig("./Paper/images/cum_line_plot.pdf")
+        # plt.savefig("./Paper/images/cum_line_plot.pdf")
         plt.show()
     return popt[1]
 
@@ -192,14 +192,14 @@ if __name__ == "__main__":
         print(prob_arrest_cum_line * boundary**2)
         print(np.pi**2/8)
 
-        if True:
+        if False:
             values = []
             for i in range(10):
                 run_model(dimen,
-                        iteration,
-                        maxSteps=maxSteps,
-                        potential=potential,
-                        boundary=boundary)
+                          iteration,
+                          maxSteps=maxSteps,
+                          potential=potential,
+                          boundary=boundary)
                 data = np.loadtxt("data.dat")
                 prob_arrest_cum_line = cum_line_plot(data, show=False, skip=100, start=boundary)
                 print(prob_arrest_cum_line * boundary**2)
@@ -208,5 +208,71 @@ if __name__ == "__main__":
             gradient = np.average(values)
             error = np.std(values)
             print(gradient, " ± ", error)
+
+        if True:
+            dimen = 1
+            iteration = 1000000
+            maxSteps = 0
+            potential = "square"
+            boundary = 8
+            prob = 0.1
+
+            alldataX = []
+            alldataY = []
+            labels = []
+            allboundaries = []
+
+            number = 4
+            for i in range(number):
+
+                boundary += i
+
+                run_model(dimen,
+                          iteration,
+                          maxSteps=maxSteps,
+                          potential=potential,
+                          boundary=boundary)
+
+                data = np.loadtxt("data.dat")
+                start = boundary
+                skip = 100
+                
+                nbins = int(int(max(data) - start)/2)
+                # plt.style.use("seaborn")
+                plt.rc('text', usetex=True)
+                plt.rc('font', family='serif')
+
+                hist = plt.hist(data, nbins, normed=True)
+                plt.clf()
+
+                x = hist[1][skip:-1]
+                y = hist[0][skip:]
+                label = "J: " + str(boundary)
+
+                alldataX.append(x)
+                alldataY.append(y)
+                labels.append(label)
+                allboundaries.append(boundary)
+
+                
+
+            for i in range(number):
+                cum_y = np.cumsum(alldataY[i][::-1])[::-1]
+
+                popt, _ = curve_fit(exp_curve, alldataX[i], cum_y, p0=[1.28, 0.019])
+
+                label = labels[i] + r", $\lambda J^2$: " + str(popt[1] * allboundaries[i]**2)
+
+                plt.yscale("log")
+                plt.plot(alldataX[i], cum_y, marker='.', ls=' ', label=label)
+                plt.plot(alldataX[i], exp_curve(alldataX[i], *popt), c='r')
+
+            plt.ylabel('log(Probability of Survival)')
+            plt.xlabel('Time Survived (no. of steps)')
+            plt.legend()
+            plt.savefig("./Paper/images/multiplot.pdf")
+            
+
+            
             
 
