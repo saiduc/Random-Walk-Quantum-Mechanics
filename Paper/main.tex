@@ -15,7 +15,7 @@
 
 % *** MY PACKAGES ***
 \usepackage{todonotes}
-
+\usepackage[caption=false]{subfig}
 
 \begin{document}
 
@@ -100,7 +100,7 @@ each extra dimension, one extra random number must be drawn. This gives a linear
 increase in time-complexity, which is convenient for long computations.
 
 Random Walk simulations can be applied to calculate the ground state energies of
-Quantum Systems by solving the Schr\"{o}dinger equation. Consider a
+Quantum Systems by solving the Schr\"{o}dinger equation \todo{cite}. Consider a
 one-dimensional simple lattice system. A walker can start at a position labelled
 the origin, and then proceed in a random walk. The random walk concludes after a
 certain number of steps or if the walker ``dies'' on a particular step. The
@@ -151,7 +151,7 @@ period of $2^{19937-1}$.
 
 The random walk ends when a walker dies, with a
 specifically chosen $a(j)$. Initially, the $a(j)$ is chosen to be that of an
-infinite square well, that is:
+infinite square well \todo{cite}, that is:
 \begin{equation}
   \label{eq:squarewell}
     a(j) =
@@ -172,7 +172,7 @@ systemic errors, since there would be a disproportionate number of walkers dying
 on the maximum number of steps.
 
 Thus, the Schr\"{o}dinger equation inside a one-dimensional infinite square well
-is simply that of a free particle:
+is simply that of a free particle \todo{cite}:
 \begin{equation}
   \frac{-\hbar^2}{2m}\frac{d^2 \psi}{dx^2} = E\psi(x)
   \nonumber
@@ -202,7 +202,7 @@ So, by calculating the death rate $\lambda$, we can find the ground state energy
 of a particle in an infinite square well.
 
 But the known ground state of a particle in an infinite square well is
-$\frac{\pi^2}{8}\frac{\hbar^2}{mJ^2}$. This implies that we expect $\lambda
+$\frac{\pi^2}{8}\frac{\hbar^2}{mJ^2}$ \todo{cite}. This implies that we expect $\lambda
 R^2=\frac{\pi^2}{8}$ where R is the boundary of the well. Thus, we expect to
 find a $\lambda$ that is close to this theoretical value.
 
@@ -222,53 +222,79 @@ against the number of steps $n$, we can obtain the death rate $\lambda$ from the
 gradient.
 
 Varying the boundary $J$ of the square well will affect the accuracy of the
-final answer, and this is investigated here.
+final answer, and this is also investigated here.
 
 
 \section{Results and Discussion}
 
-Sample Text
 
-\begin{figure}[H]%[!ht]
+
+\begin{figure*}[ht!]
+  \centering
+  \subfloat[Histogram of probability of dying on particlar step]
+  {\includegraphics[width=0.5\textwidth]{images/exp_plot.pdf}
+  \label{fig:hist}}
+  \centering
+  \subfloat[Histogram of probability of dying on particular step in a logarithmic scale]
+  {\includegraphics[width=0.5\textwidth]{images/line_plot.pdf}
+    \label{fig:loghist}}
+  \caption{Histograms showing the Probability of dying on a particular step in
+    an infinite square well with $J = 20$. As can be seen, the peak is away from the
+    origin, as is expected since it is not likely for a walker to die on a step $n$
+    where $n < J$. The exponential decay after the peak is evident, implying a
+    straight line shape if plotted on a logarithmic scale, which can be seen on
+    the right hand side plot. In this logarithmic scale plot, the peak being away
+    from the origin is clearer.}
+  \label{fig:expplots}
+\end{figure*}
+
+
+
+\begin{figure*}[ht!]
+  \centering
+  \subfloat[Histogram of probability of surviving to at least a particlar step]
+  {\includegraphics[width=0.5\textwidth]{images/cum_exp_plot.pdf}
+  \label{fig:cumhist}}
+  \centering
+  \subfloat[Histogram of probability of surviving to at least a particular step
+  in a logarithmic scale]
+  {\includegraphics[width=0.5\textwidth]{images/cum_line_plot.pdf}
+  \label{fig:cumloghist}}
+  \caption{Histogram showing the Probability of surviving to at least a
+      particular step in an infinite square well with $J = 20$. This is a
+      cumulative sum of the bins in Figure \ref{fig:hist}. As can be seen, the
+      peak is at the origin, since it is certain that no walker will die on the
+      first step. An exponential decay curve provides a good fit, with an $R^2$
+      value of 0.9999998, very close to 1. Plotting on a logarithmic scale shows
+      the straight line fit, the gradient of which is $\lambda$, giving $\lambda
+      J^2 = 1.2334$, with a negligible error.}
+  \label{fig:cumplots}
+\end{figure*}
+
+
+\begin{figure}[!ht]
   \begin{center}
-    \includegraphics[width=0.45\textwidth]{images/exp_plot.pdf}
-    \caption{Illustrations, graphs, and photographs may fit across both columns, if necessary. Your artwork must be in place in the article.}
-    \label{fig:exp_plot}
+    \includegraphics[width=0.45\textwidth]{images/multiplot.pdf}
+    \caption{Histogram plotted on a logarithmic scale showing the Probability of
+      surviving to at least a particualr step in different infinite square wells with
+      different boundaries $J$. The $\lambda J^2$ values for each are shown. The
+      values get closer to the theoretical value of $\frac{\pi^2}{8}$ as we increase
+      the size of the well. This is likely due to more walkers surviving to a higher
+      number of steps, as the well size is increased.}
+    \label{fig:multi_line_plot}
   \end{center}
 \end{figure}
 
 
-\begin{figure}[H]%[!ht]
-  \begin{center}
-    \includegraphics[width=0.45\textwidth]{images/line_plot.pdf}
-    \caption{Illustrations, graphs, and photographs may fit across both columns, if necessary. Your artwork must be in place in the article.}
-    \label{fig:line_plot}
-  \end{center}
-\end{figure}
-
-
-\begin{figure}[H]%[!ht]
-  \begin{center}
-    \includegraphics[width=0.45\textwidth]{images/cum_exp_plot.pdf}
-    \caption{Illustrations, graphs, and photographs may fit across both columns, if necessary. Your artwork must be in place in the article.}
-    \label{fig:cum_exp_plot}
-  \end{center}
-\end{figure}
-
-
-\begin{figure}[H]%[!ht]
-  \begin{center}
-    \includegraphics[width=0.45\textwidth]{images/cum_line_plot.pdf}
-    \caption{Illustrations, graphs, and photographs may fit across both columns, if necessary. Your artwork must be in place in the article.}
-    \label{fig:cum_line_plot}
-  \end{center}
-\end{figure}
-
-
-\begin{figure}[H]%[!ht]
+\begin{figure}[!ht]
   \begin{center}
     \includegraphics[width=0.45\textwidth]{images/cum_line_plot_cutoff.pdf}
-    \caption{Illustrations, graphs, and photographs may fit across both columns, if necessary. Your artwork must be in place in the article.}
+    \caption{Histogram plotted on a logarithmic scale showing the Probability of
+      surviving to at least a particular step in an infinite square well with $J
+      = 20$, and also introducing a maximum number of steps at 2000, after which
+      all walkers will die. This saves computational resources but introduces
+      some systematic error, as there will now be a disproportionately high
+      number of walkers in the 2000 steps bin.}
     \label{fig:cum_line_cutoff_plot}
   \end{center}
 \end{figure}
