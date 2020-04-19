@@ -2,7 +2,7 @@
 
 % *** CITATION PACKAGES ***
 \usepackage[style=ieee]{biblatex} 
-\bibliography{random_walk.bib}    %your file created using JabRef
+\bibliography{random_walk.bib}
 
 % *** MATH PACKAGES ***
 \usepackage{amsmath}
@@ -10,7 +10,7 @@
 % *** PDF, URL AND HYPERLINK PACKAGES ***
 \usepackage{url}
 \hyphenation{op-tical net-works semi-conduc-tor}
-\usepackage{graphicx}  %needed to include png, eps figures
+\usepackage{graphicx}  % needed to include png, eps figures
 \usepackage{float}  % used to fix location of images i.e.\begin{figure}[H]
 
 % *** MY PACKAGES ***
@@ -262,107 +262,6 @@ calculated ground state energy to the theoretical energy for different sized wel
 
 
 \section{Results and Discussion}
-The simulation was first run for an infinite square well with boundary $J = 20$,
-with 1000000 walkers. The step on which each walker died was recorded and then
-the normalised histogram in Figure \ref{fig:hist} was constructed. The histogram
-has been normalised, and is hence a probability distribution showing the
-probability that a walker will die on a particular step. As we expect, the peak
-is far from the origin, since for a walker to die in an inifinite square well
-with $J=20$, they would have to walk at least 20 steps. It is also highly
-unlikely that a walker would walk 20 steps in the same direction
-consecutively. Thus, the peak is also at a number of steps greater than $J$. We
-expect the shape of the decay after the peak to be exponential. We can see this
-by plotting the histogram on a logarithmic scale.
-
-Figure \ref{fig:loghist} presents the same histogram data with a logarithmic y
-scale. In this figure, a straight line is evident in the data, showing the decay
-was indeed exponential after the peak. The peak probability being away fro the
-origin is also clearer in this figure. Figure \ref{fig:loghist} shows a
-``widening'' of the straight line at higher step numbers. This is because there
-is a greater variance in the number of walkers surviving to this number as it is
-highly unlikely. 
-
-By taking the cumulative sum of the histograms in Figure \ref{fig:expplots}, we
-can ensure the peak probability begins at the origin. Figure \ref{fig:cumplots}
-present the cumulative sums of the histograms. They represent the probability of
-surviving at least a particular number of steps. Hence, the peak probability of
-1 is at the origin, since there is a probability of 1 that a walker will survive
-the first step.
-
-Figure \ref{fig:cumhist} presents the cumulative summed histogram, with a fitted
-exponential curve of the form of Equation \ref{eq:firsteq}. The fit is very
-good, with $R^2 = 0.9999998$, very close to 1. There is also negligible
-numerical error in the fit, i.e. an error smaller than the quoted precision of
-the fit parameters. This is because the simulation was run for 1000000 walkers,
-providing a large sample size. Figure \ref{fig:cumloghist} presents the same
-histogram with a logarithmic y-scale and a fitted straight line of the form of
-Equation \ref{eq:straightline}. This fit has the same $R^2$ value, as it is
-simply the same fit on a different y-scale, and is thus equally good.
-
-We observe some fluctuation in the data in the higher steps. This is because
-there are so few walkers surviving to this many steps that there is more
-significant variance in their relative numbers. It is possible to remove this
-variance by introducing a cutoff number of steps, i.e. a maximum number of steps
-at which the walker will automatically die, regardless of whether they reached a
-boundary or not. Thus, there will not be such high variance in the number of
-walkers surviving to high number of steps. This is presented in Figure
-\ref{fig:cum_line_cutoff_plot}. While this fit is observed to be better, with a
-higher $R^2$ value, some systematic error has been introduced since there will now
-be a disproportionately high number of walkers dying at the cutoff step. Thus,
-the final $\lambda J^2$ value will be less accurate. On a faster computer, with
-more efficient code, it is possible to forgo the step cutoff and allow the
-simulation to run until all the walkers die. This may take much longer but will
-ensure there will not be such a systematic error introduced.
-
-We can use the gradient of the fitted line in Figure \ref{fig:cumloghist} as the
-$\lambda$ value, and compare $\lambda J^2$ with the theoretical value. However,
-to determine the reliability of the calculated value, it is necessary to repeat
-the procedure many times and take the average $\lambda$ and the standard
-deviation as the error.
-
-It is also necessary to investigate how varying the boundary $J$ affects the
-accuracy of the final answer. Figure \ref{fig:multi_line_plot} presents the
-cumulative summed histograms with their fitted lines for many different boundary
-$J$ values. No step cutoff was introduced. The calculated $\lambda J^2$ value is
-shown in the legend. \todo{truncate numbers} As shown, the gradient changes, but
-this is to be expected since the expected highest number of steps would increase
-as the boundary is larger, since there is more ``space'' for the walker to move
-before reaching a boundary. As shown in the legend, the calculated $\lambda J^2$
-values get closer and closer and closer to the theoretical value as $J$
-increases. This is due to the fact that as $J$ increases, there are more walkers
-surviving to larger number of steps. \todo{make plot of lambda J against J}.
-Thus, we can say that using a larger value of $J$ will result in a more
-accurate answer but will also be more computationally intensive and take
-longer. Thus, we make a tradeoff between speed and accuracy and choose $J=20$
-for the final investigation.
-
-Running the simulation 10 times and taking the average $\lambda J^2$ with error
-being standard deviation, we find: $\lambda J^2 = 1.2339 \pm 0.0008$. We quote
-the precision to the decimal place at which there is variation from the
-theoretical result of $1.2337$. We notice also that the error in the calculated
-answer is small (since there is not much variation between repeated simulations)
-and the theoretical result is within the range of the calculated answer.
-
-\todo{circular well}
-\begin{figure*}%[ht!]
-  \centering
-  \subfloat[Histogram of probability of dying on particlar step]
-  {\includegraphics[width=0.5\textwidth]{images/exp_plot.pdf}
-  \label{fig:hist}}
-  \centering
-  \subfloat[Histogram of probability of dying on particular step in a logarithmic scale]
-  {\includegraphics[width=0.5\textwidth]{images/line_plot.pdf}
-    \label{fig:loghist}}
-  \caption{Histograms showing the Probability of dying on a particular step in
-    an infinite square well with $J = 20$. As can be seen, the peak is away from the
-    origin, as is expected since it is not likely for a walker to die on a step $n$
-    where $n < J$. The exponential decay after the peak is evident, implying a
-    straight line shape if plotted on a logarithmic scale, which can be seen on
-    the right hand side plot. In this logarithmic scale plot, the peak being away
-    from the origin is clearer.}
-  \label{fig:expplots}
-\end{figure*}
-
 
 
 \begin{figure*}%[ht!]
@@ -376,40 +275,175 @@ and the theoretical result is within the range of the calculated answer.
   {\includegraphics[width=0.5\textwidth]{images/cum_line_plot.pdf}
   \label{fig:cumloghist}}
   \caption{Histogram showing the Probability of surviving to at least a
-      particular step in an infinite square well with $J = 20$. This is a
-      cumulative sum of the bins in Figure \ref{fig:hist}. As can be seen, the
-      peak is at the origin, since it is certain that no walker will die on the
-      first step. An exponential decay curve provides a good fit, with an $R^2$
-      value of 0.9999998, very close to 1. Plotting on a logarithmic scale shows
-      the straight line fit, the gradient of which is $\lambda$, giving $\lambda
-      J^2 = 1.2334$, with a negligible error.}
+    particular step in an infinite square well with $J = 20$. The peak of 1 does
+    not start at the origin but at step 100. This is because these steps were
+    neglected in the plot as prior to this step the exponential shape is less
+    clear, as explained by Figure \ref{fig:hist}. An exponential decay curve
+    provides a good fit, with an $R^2$ value of 0.9999998, very close to
+    1. Plotting on a logarithmic scale shows the straight line fit, the gradient
+    of which is $\lambda$, giving $\lambda J^2 = 1.2334$, with a negligible
+    error. The fluctuation in the higher step number regions is due to the large
+    variance in the small number of walkers that die at these steps.}
   \label{fig:cumplots}
 \end{figure*}
 
-\todo{fix centering of cum plot}
+The simulation was first run for an infinite square well with boundary $J=20$
+with 1000000 walkers. The number of walkers surviving at each step was recorded
+and the histograms in Figure \ref{fig:cumplots} were created. The probability
+that a walker will survive at a particular step is simply the 1 minus the
+normalised cumulative sum of walkers dying at each step. The curve has been
+fitted with an exponential function of the form in Equation
+\ref{eq:firsteq}. This results in a very good fit, with an $R^2$ value of
+0.9999998, indicating the data does not vary much from the curve of best
+fit. This is likely due to the very large number of walkers used in this
+experiment, as allowed by the performant C++ implementation.
+
+We can see this better in Figure \ref{fig:cumloghist}, which is the same
+exponential plot fitted on a logarithmic scale. The closeness of the data to the
+line of best fit is evident here. The error in the fitted parameters is
+negligible, as shown by the $R^2$ value. The gradient of the fitted line is
+taken to be $\lambda$ and thus allows us to calculate $\lambda J^2 = 1.2334$,
+compared to the theoretical value of $\frac{\pi^2}{8} = 1.2337$, quoting both
+values to the precision at which they vary. Since the numerical error in the
+fits is negligible, it cannot be propagated into an error in the final
+answer. Thus, we get the error in the final answer from repeated runs of the
+simulation and taking the standard deviation of the many values.
+
+As we can observe in Figure \ref{fig:cumhist}, the peak of the curve does not
+lie at the origin as we might expect from the fact that all walkers should
+survive at least the first step. The reason for this is twofold:
+\begin{itemize}
+\item For a well with boundary $J$, it is not possible for the walker to die in
+  a number of steps less than $J$
+\item It is highly unlikely that the walker will die at a number of steps
+  greater than but still close to $J$ since it would require walking in the same
+  direction a dispropotionate number of times.
+\end{itemize}
 
 \begin{figure}%[!ht]
   \begin{center}
-    \includegraphics[width=0.45\textwidth]{images/cum_line_plot_cutoff.pdf}
-    \caption{Histogram plotted on a logarithmic scale showing the Probability of
-      surviving to at least a particular step in an infinite square well with $J
-      = 20$, and also introducing a maximum number of steps at 2000, after which
-      all walkers will die. This saves computational resources but introduces
-      some systematic error, as there will now be a disproportionately high
-      number of walkers in the 2000 steps bin.}
-    \label{fig:cum_line_cutoff_plot}
+    \includegraphics[width=0.45\textwidth]{images/exp_plot.pdf}
+    \caption{The probability of dying on a particular step in an infnite square
+      well with $J=20$. As can be seen, the peak is away from the origin. This
+      is because, for a well with boundary $J$, the minimum number of steps a
+      walker must take is $J$. However, it is still unlikely that the walker
+      will die on this minimum number of steps, as then the walker must walk in
+      the same direction every time. Thus, the most probable step for the walker
+      to die on is greater than $J$. It is for this reason that the exponential
+      decay does not begin at the origin in Figure \ref{fig:cumhist}, meaning
+      some earlier steps must be neglected in order to achieve a better fit.}
+    \label{fig:hist}
   \end{center}
 \end{figure}
 
+These effects are evident in Figure \ref{fig:hist}, which presents the
+probability that a walker will die at a particular number of steps. We can see
+that the peak of the curve is very clearly at a step that is greater than 20,
+which was the $J$ value used in this simulation. Thus, for low step numbers, the
+shape of the curve is not exponential. For this reason we used a simple
+algorithm to identify a suitable number of steps to skip before fitting the
+exponential curve. It is for this reason that the histogram in Figure
+\ref{fig:cumhist} does not start at the origin.
+
 
 \begin{figure}%[!ht]
   \begin{center}
-    \includegraphics[width=0.45\textwidth]{images/multiplot.pdf}
+    \includegraphics[width=0.45\textwidth]{images/line_plot.pdf}
+    \caption{The probability of dying on a particular step in an infnite square
+      well with $J=20$, plotted on a logarithmic scale. As explained for Figure
+      \ref{fig:hist}, the peak probability is on a step greater than $J$. This
+      is clear in this plot. It is also evident that there is significantly more
+      spread in the points at higher steps. This is due to there being
+      significantly fewer walkers dying on these steps, so the relative
+      differences are higher. This explains the fluctuations seen at higher
+      steps in Figure \ref{fig:cumloghist}.}
+    \label{fig:loghist}
+  \end{center}
+\end{figure}
+
+We observe some fluctuation in the data in the higher steps in Figure
+\ref{fig:cumloghist}. This is because there are so few walkers surviving to this
+many steps that there is more significant variance in their relative numbers. We
+can observe this in Figure \ref{fig:loghist}. At higher step numbers, the spread
+is clearly larger due to the greater relative variance in the small number of
+walkers surviving to this many steps. When this data is cumulatively summed to
+calculate the probability of survival shown in Figure \ref{fig:cumloghist}, the
+spread is present as the fluctuations.
+
+\begin{figure*}%[ht!]
+  \centering
+  \subfloat[Probability of dying on a particlar step with a step cutoff]
+  {\includegraphics[width=0.5\textwidth]{images/exp_plot_cutoff.pdf}
+  \label{fig:expcutoff}}
+  \centering
+  \subfloat[Probability of surviving to at least a particular step in a
+  logarithmic scale with a step cutoff]
+  {\includegraphics[width=0.5\textwidth]{images/cum_line_plot_cutoff.pdf}
+  \label{fig:cum_line_cutoff_plot}}
+  \caption{Histograms showing the results of the simulation when a maximm number
+  of steps is introduced. If a walker reaches this number of steps, they
+  automatically die, regardless of position. This results in a
+  disproportionately high number of walkers dying at this maximum number, 2000
+  in this case, as shown by Figure \ref{fig:expcutoff}. However, this results in
+  no fluctuation at higher number of steps, as shown in Figure
+  \ref{fig:cum_line_cutoff_plot}, though some systematic error is introduced
+  through this method.}
+  \label{fig:cutoffplots}
+\end{figure*}
+
+It is possible to remove this variance by introducing a cutoff number of steps,
+i.e. a maximum number of steps at which the walker will automatically die,
+regardless of whether they reached a boundary or not. Thus, there will not be
+such high variance in the number of walkers surviving to high number of
+steps. This is presented in Figure \ref{fig:cum_line_cutoff_plot}. While this
+fit is observed to be better, with a higher $R^2$ value, some systematic error
+has been introduced since there will now be a disproportionately high number of
+walkers dying at the cutoff step as can be seen in Figure
+\ref{fig:expcutoff}. Thus, the final $\lambda J^2$ value will be less
+accurate. On a faster computer, with more efficient code, it is possible to
+forgo the step cutoff and allow the simulation to run until all the walkers
+die. This may take much longer but will ensure there will not be such a
+systematic error introduced. This is the method used in this investigation.
+
+
+It is also necessary to investigate how varying the boundary $J$ affects the
+accuracy of the final answer. Figure \ref{fig:multi_line_plot} presents the
+cumulative summed histograms with their fitted lines for many different boundary
+$J$ values. No step cutoff was introduced. The calculated $\lambda J^2$ value is
+shown in the legend. As shown, the gradient changes, but this is to be expected
+since the expected highest number of steps would increase as the boundary is
+larger, since there is more space for the walker to move before reaching a
+boundary. As shown in the legend, the calculated $\lambda J^2$ values get closer
+and closer and closer to the theoretical value as $J$ increases. This is due to
+the fact that as $J$ increases, there are more walkers surviving to larger
+number of steps. Thus, we can say that using a larger value of $J$ will result
+in a more accurate answer but will also be more computationally intensive and
+take longer. Thus, we make a tradeoff between speed and accuracy and choose
+$J=20$ for the final investigation.
+
+Running the simulation 10 times and taking the average $\lambda J^2$ with error
+being standard deviation, we find:
+\begin{equation}
+  \lambda J^2 = 1.2339 \pm 0.0008
+  \nonumber
+\end{equation}
+We quote the precision to the decimal place at which there is variation from the
+theoretical result of $1.2337$. We notice that the error in the calculated
+answer is small (since there is not much variation between repeated simulations)
+and the theoretical result is within the range of the calculated answer.
+
+
+\todo{circular well}
+
+\begin{figure}%[!ht]
+  \begin{center}
+    \includegraphics[width=0.45\textwidth]{images/multiplot1.pdf}
     \caption{Histogram plotted on a logarithmic scale showing the Probability of
-      surviving to at least a particualr step in different infinite square wells with
-      different boundaries $J$. The $\lambda J^2$ values for each are shown. The
-      values get closer to the theoretical value of $\frac{\pi^2}{8}$ as we increase
-      the size of the well. This is likely due to more walkers surviving to a higher
+      surviving to at least a particualr step in different infinite square wells
+      with different boundaries $J$. The simulations were run with $10000$
+      walkers The $\lambda J^2$ values for each are shown. The values get closer
+      to the theoretical value of $\frac{\pi^2}{8} = 1.2337$ as we increase the
+      size of the well. This is likely due to more walkers surviving to a higher
       number of steps, as the well size is increased.}
     \label{fig:multi_line_plot}
   \end{center}
@@ -448,31 +482,15 @@ may not be very efficient for low number of dimensions, it quickly becomes
 effective at a higher number of dimensions.
 
 
-
-% if have a single appendix:
-%\appendix[Proof of the Zonklar Equations]
-% or
-%\appendix  % for no appendix heading
-% do not use \section anymore after \appendix, only \section*
-% is possibly needed
-
-% use appendices with more than one appendix
-% then use \section to start each appendix
-% you must declare a \section before using any
-% \subsection or using \label (\appendices by itself
-% starts a section numbered zero.)
-%
-
-
-
 \appendices
 \section{Random walk Schr\"{o}dinger Equation Derivation}
 \label{appendix:derivation}
-Let us denote the probability that the walker is at position $j$ after $n$ steps
-as $p(j,n)$ and the probabilty that the walker will die at position $j$ as
-$a(j)$. We will denote the position-step number coordinates as $[j, n]$. Thus,
-for a walker to have coordinates $[j, n+1]$, in the previous step, they must have
-had coordinates $[j \pm 1, n]$. So we can say:
+Consider a one-dimensional lattice upon which a walker is undergoing a random
+walker. Let us denote the probability that the walker is at position $j$ after
+$n$ steps as $p(j,n)$ and the probabilty that the walker will die at position
+$j$ as $a(j)$. We will denote the position-step number coordinates as $[j,
+n]$. Thus, for a walker to have coordinates $[j, n+1]$, in the previous step,
+they must have had coordinates $[j \pm 1, n]$. So we can say:
 
 \begin{equation}
   \label{eq:probability}
