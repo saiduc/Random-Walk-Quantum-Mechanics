@@ -48,6 +48,8 @@
 % summary of the results and findings. Conclusions: Give brief concluding remarks
 % on your outcomes. Detailed discussion of these aspects should be provided in the
 % main body of the paper.
+  In this paper, we present a novel way of calculating ground state energies for
+  a quantum simulation using a Random Walk Monte Carlo simulation.
 \end{abstract}
 
 
@@ -68,7 +70,7 @@ such as the Variational-Relaxiation algorithm \cite{Schroeder2017}. This is a
 particularly useful algorithm for two-dimensional systems with non-separable
 potentials but quickly becomes difficult to implement for more complex systems.
 
-In this investigation, I explore an alternative Monte Carlo method using Random
+In this investigation, we explore an alternative Monte Carlo method using Random
 Walk simulations, and demonstrate its efficacy with simple systems.
 
 
@@ -84,7 +86,7 @@ walker standing at a point labelled the origin. The walker takes 20 steps, the
 direction of each step (forwards or backwards on the line) is random. The
 position of the walker at each step is shown in Figure \ref{fig:cartoon}.
 
-\begin{figure}%[H]%%[!ht]
+\begin{figure}[H]%[!ht]
   \begin{center}
     \includegraphics[width=0.45\textwidth]{images/cartoon.pdf}
     \caption{The position of a walker at each step in a 20-step random walk
@@ -114,7 +116,7 @@ increase in time-complexity, which is convenient for more complex systems.
 
 This investigation applied Random walk simulations to calculate the ground state
 energies of Quantum Systems by solving the Schr\"{o}dinger equation, as shown in
-\todo{cite}.
+\cite{Ceperley1983}.
 
 We can extend the simple one-dimensional line model from Figure
 \ref{fig:cartoon} to a quantum system by imagining it as a one-dimensional
@@ -178,7 +180,7 @@ death such that:
 where J is a well-defined boundary. So the walker cannot die inside the well but
 wil immediately die when they step outside, which we expect will definitely
 happen given sufficient time. Inside the well, the potential is simply that of a
-free particle \todo{cite}:
+free particle \cite{Bransden2003}:
 
 \begin{equation}
   \frac{-\hbar^2}{2m}\frac{d^2 \psi}{dx^2} = E\psi(x)
@@ -205,7 +207,7 @@ the well, we see that:
 where only $\lambda$ is an unknown quantity. Thus, by calculating rate of death
 $\lambda$, we can calculate the ground state energy of the infinite square
 well. The known ground state energy of an infnite square well is
-$\frac{\pi^2}{8}\frac{\hbar^2}{mJ^2}$ \todo{cite}, so we expect to find $\lambda
+$\frac{\pi^2}{8}\frac{\hbar^2}{mJ^2}$ \cite{Davies1998}, so we expect to find $\lambda
 R^2$ close to $\frac{\pi}{8}$.
 
 To find the rate of death $\lambda$, we consider Equation \ref{eq:firsteq}. With
@@ -264,7 +266,7 @@ calculated ground state energy to the theoretical energy for different sized wel
 \section{Results and Discussion}
 
 
-\begin{figure*}%[ht!]
+\begin{figure*}[ht!]
   \centering
   \subfloat[Histogram of probability of surviving to at least a particlar step]
   {\includegraphics[width=0.5\textwidth]{images/cum_exp_plot.pdf}
@@ -320,7 +322,7 @@ survive at least the first step. The reason for this is twofold:
   direction a dispropotionate number of times.
 \end{itemize}
 
-\begin{figure}%[!ht]
+\begin{figure}[H]%[!ht]
   \begin{center}
     \includegraphics[width=0.45\textwidth]{images/exp_plot.pdf}
     \caption{The probability of dying on a particular step in an infnite square
@@ -370,7 +372,7 @@ walkers surviving to this many steps. When this data is cumulatively summed to
 calculate the probability of survival shown in Figure \ref{fig:cumloghist}, the
 spread is present as the fluctuations.
 
-\begin{figure*}%[ht!]
+\begin{figure*}[ht!]
   \centering
   \subfloat[Probability of dying on a particlar step with a step cutoff]
   {\includegraphics[width=0.5\textwidth]{images/exp_plot_cutoff.pdf}
@@ -405,6 +407,19 @@ forgo the step cutoff and allow the simulation to run until all the walkers
 die. This may take much longer but will ensure there will not be such a
 systematic error introduced. This is the method used in this investigation.
 
+\begin{figure}[!ht]
+  \begin{center}
+    \includegraphics[width=0.45\textwidth]{images/multiplot1.pdf}
+    \caption{Histogram plotted on a logarithmic scale showing the Probability of
+      surviving to at least a particular step in different infinite square wells
+      with different boundaries $J$. The simulations were run with $10000$
+      walkers The $\lambda J^2$ values for each are shown. The values get closer
+      to the theoretical value of $\frac{\pi^2}{8} = 1.2337$ as we increase the
+      size of the well. This is likely due to more walkers surviving to a higher
+      number of steps, as the well size is increased.}
+    \label{fig:multi_line_plot}
+  \end{center}
+\end{figure}
 
 It is also necessary to investigate how varying the boundary $J$ affects the
 accuracy of the final answer. Figure \ref{fig:multi_line_plot} presents the
@@ -421,8 +436,9 @@ in a more accurate answer but will also be more computationally intensive and
 take longer. Thus, we make a tradeoff between speed and accuracy and choose
 $J=20$ for the final investigation.
 
-Running the simulation 10 times and taking the average $\lambda J^2$ with error
-being standard deviation, we find:
+Running the simulation 10 times with 1000000 walkers in an infinite square well
+with $J=20$ and taking the average $\lambda J^2$ with error being standard
+deviation, we find:
 \begin{equation}
   \lambda J^2 = 1.2339 \pm 0.0008
   \nonumber
@@ -433,44 +449,26 @@ answer is small (since there is not much variation between repeated simulations)
 and the theoretical result is within the range of the calculated answer.
 
 
-\todo{circular well}
-
-\begin{figure}%[!ht]
-  \begin{center}
-    \includegraphics[width=0.45\textwidth]{images/multiplot1.pdf}
-    \caption{Histogram plotted on a logarithmic scale showing the Probability of
-      surviving to at least a particualr step in different infinite square wells
-      with different boundaries $J$. The simulations were run with $10000$
-      walkers The $\lambda J^2$ values for each are shown. The values get closer
-      to the theoretical value of $\frac{\pi^2}{8} = 1.2337$ as we increase the
-      size of the well. This is likely due to more walkers surviving to a higher
-      number of steps, as the well size is increased.}
-    \label{fig:multi_line_plot}
-  \end{center}
-\end{figure}
-
-
 \section{Conclusions}
 
 In this investigation we demonstrated a method of calculating ground state
 energies of a quantum system using Random walk computational simulations. The
-investigation focussed on an Infinite Square Well, but is easily extended to a
-Symmetric potential. The simualation was written in C++ to maximise performance
-and is available at \todo{cite}.
+investigation focussed on a one dimensional infinite square well, but can easily
+be extended to more complex systems such as a circular well in two dimensions.
 
 The investigation explored the effects of varying the size of the well in
 determining the ground state energy of a quantum system, and showed that this
-method is more effective for larger wells, i.e. wells with larger
-boundaries. This is because for wells with larger boundaries, the walker can
-take a larger number of steps on average before dying, and thus can populate
-larger step bins. Thus, this method produces data that is close to the
-theoretical result for larger infinite square wells.
+method produces more accurate results for ground state energies of larger wells.
+This is because for wells with larger boundaries, the walker can take a larger
+number of steps on average before dying, and thus can populate larger step
+bins. Thus, this method produces data that is close to the theoretical result
+for larger infinite square wells.
 
 The general theoretical result for the ground state energy of an infinite square
 well is $\frac{\pi^2}{8}\frac{\hbar^2}{mJ^2}$ where $J$ is the boundary of the
 well, and this method allows for the calculation of $\lambda R^2
 \frac{\hbar^2}{mJ^2}$, where $R$ also corresponds to the boundary of the
-well. Thus, we expect our calculated result to be $\lambda R^2 = \lambda J^2 =
+well. Thus, we expect our calculated result to be $\lambda J^2 =
 \frac{\pi^2}{8}$.
 
 This method provided $\lambda J^2 = 1.2339 \pm 0.0008$, which lies within the
@@ -482,6 +480,7 @@ may not be very efficient for low number of dimensions, it quickly becomes
 effective at a higher number of dimensions.
 
 
+\pagebreak
 \appendices
 \section{Random walk Schr\"{o}dinger Equation Derivation}
 \label{appendix:derivation}
