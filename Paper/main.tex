@@ -76,10 +76,11 @@ considering a one-dimensional line. On this line, the ``walker'' starts at the
 origin, and walks a total of 20 steps. The walker at each step has a equal
 chance of stepping forwards, or stepping backwards.
 
-\begin{figure}%[H]%[!ht]
+\begin{figure}%[H]%%[!ht]
   \begin{center}
     \includegraphics[width=0.45\textwidth]{images/cartoon.pdf}
-    \caption{Illustrations, graphs, and photographs may fit across both columns, if necessary. Your artwork must be in place in the article.}
+    \caption{Illustrations, graphs, and photographs may fit across both columns,
+      if necessary. Your artwork must be in place in the article.}
     \label{fig:cartoon}
   \end{center}
 \end{figure}
@@ -168,7 +169,7 @@ sufficient time, all the walkers will reach the boundary and die. But in order
 to save computational resources, a maximum number of steps may also be defined,
 such that a walker will also die should they move that number of steps without
 reaching a boundary. This was not initially implemented, as it can introduce
-systemic errors, since there would be a disproportionate number of walkers dying
+systematic errors, since there would be a disproportionate number of walkers dying
 on the maximum number of steps.
 
 Thus, the Schr\"{o}dinger equation inside a one-dimensional infinite square well
@@ -213,10 +214,15 @@ some simple manipulation:
   \begin{split}
     p(j, n) & = q(j) \exp(-\lambda n)\\
     \log(p) & = \log(q \exp(-\lambda n)) \\
-    \log(p) & = -\lambda n + log(q)
   \end{split}
   \nonumber
 \end{equation}
+
+\begin{equation}
+  \log(p) = -\lambda n + log(q)
+  \label{eq:straightline}
+\end{equation}
+
 Thus, by plotting the logarithm of the probability of surviving $n$ steps
 against the number of steps $n$, we can obtain the death rate $\lambda$ from the
 gradient.
@@ -226,10 +232,89 @@ final answer, and this is also investigated here.
 
 
 \section{Results and Discussion}
+The simulation was first run for an infinite square well with boundary $J = 20$,
+with 1000000 walkers. The step on which each walker died was recorded and then
+the normalised histogram in Figure \ref{fig:hist} was constructed. The histogram
+has been normalised, and is hence a probability distribution showing the
+probability that a walker will die on a particular step. As we expect, the peak
+is far from the origin, since for a walker to die in an inifinite square well
+with $J=20$, they would have to walk at least 20 steps. It is also highly
+unlikely that a walker would walk 20 steps in the same direction
+consecutively. Thus, the peak is also at a number of steps greater than $J$. We
+expect the shape of the decay after the peak to be exponential. We can see this
+by plotting the histogram on a logarithmic scale.
 
+Figure \ref{fig:loghist} presents the same histogram data with a logarithmic y
+scale. In this figure, a straight line is evident in the data, showing the decay
+was indeed exponential after the peak. The peak probability being away fro the
+origin is also clearer in this figure. Figure \ref{fig:loghist} shows a
+``widening'' of the straight line at higher step numbers. This is because there
+is a greater variance in the number of walkers surviving to this number as it is
+highly unlikely. 
 
+By taking the cumulative sum of the histograms in Figure \ref{fig:expplots}, we
+can ensure the peak probability begins at the origin. Figure \ref{fig:cumplots}
+present the cumulative sums of the histograms. They represent the probability of
+surviving at least a particular number of steps. Hence, the peak probability of
+1 is at the origin, since there is a probability of 1 that a walker will survive
+the first step.
 
-\begin{figure*}[ht!]
+Figure \ref{fig:cumhist} presents the cumulative summed histogram, with a fitted
+exponential curve of the form of Equation \ref{eq:firsteq}. The fit is very
+good, with $R^2 = 0.9999998$, very close to 1. There is also negligible
+numerical error in the fit, i.e. an error smaller than the quoted precision of
+the fit parameters. This is because the simulation was run for 1000000 walkers,
+providing a large sample size. Figure \ref{fig:cumloghist} presents the same
+histogram with a logarithmic y-scale and a fitted straight line of the form of
+Equation \ref{eq:straightline}. This fit has the same $R^2$ value, as it is
+simply the same fit on a different y-scale, and is thus equally good.
+
+We observe some fluctuation in the data in the higher steps. This is because
+there are so few walkers surviving to this many steps that there is more
+significant variance in their relative numbers. It is possible to remove this
+variance by introducing a cutoff number of steps, i.e. a maximum number of steps
+at which the walker will automatically die, regardless of whether they reached a
+boundary or not. Thus, there will not be such high variance in the number of
+walkers surviving to high number of steps. This is presented in Figure
+\ref{fig:cum_line_cutoff_plot}. While this fit is observed to be better, with a
+higher $R^2$ value, some systematic error has been introduced since there will now
+be a disproportionately high number of walkers dying at the cutoff step. Thus,
+the final $\lambda J^2$ value will be less accurate. On a faster computer, with
+more efficient code, it is possible to forgo the step cutoff and allow the
+simulation to run until all the walkers die. This may take much longer but will
+ensure there will not be such a systematic error introduced.
+
+We can use the gradient of the fitted line in Figure \ref{fig:cumloghist} as the
+$\lambda$ value, and compare $\lambda J^2$ with the theoretical value. However,
+to determine the reliability of the calculated value, it is necessary to repeat
+the procedure many times and take the average $\lambda$ and the standard
+deviation as the error.
+
+It is also necessary to investigate how varying the boundary $J$ affects the
+accuracy of the final answer. Figure \ref{fig:multi_line_plot} presents the
+cumulative summed histograms with their fitted lines for many different boundary
+$J$ values. No step cutoff was introduced. The calculated $\lambda J^2$ value is
+shown in the legend. \todo{truncate numbers} As shown, the gradient changes, but
+this is to be expected since the expected highest number of steps would increase
+as the boundary is larger, since there is more ``space'' for the walker to move
+before reaching a boundary. As shown in the legend, the calculated $\lambda J^2$
+values get closer and closer and closer to the theoretical value as $J$
+increases. This is due to the fact that as $J$ increases, there are more walkers
+surviving to larger number of steps. \todo{make plot of lambda J against J}.
+Thus, we can say that using a larger value of $J$ will result in a more
+accurate answer but will also be more computationally intensive and take
+longer. Thus, we make a tradeoff between speed and accuracy and choose $J=20$
+for the final investigation.
+
+Running the simulation 10 times and taking the average $\lambda J^2$ with error
+being standard deviation, we find: $\lambda J^2 = 1.2339 \pm 0.0008$. We quote
+the precision to the decimal place at which there is variation from the
+theoretical result of $1.2337$. We notice also that the error in the calculated
+answer is small (since there is not much variation between repeated simulations)
+and the theoretical result is within the range of the calculated answer.
+
+\todo{circular well}
+\begin{figure*}%[ht!]
   \centering
   \subfloat[Histogram of probability of dying on particlar step]
   {\includegraphics[width=0.5\textwidth]{images/exp_plot.pdf}
@@ -250,7 +335,7 @@ final answer, and this is also investigated here.
 
 
 
-\begin{figure*}[ht!]
+\begin{figure*}%[ht!]
   \centering
   \subfloat[Histogram of probability of surviving to at least a particlar step]
   {\includegraphics[width=0.5\textwidth]{images/cum_exp_plot.pdf}
@@ -267,12 +352,27 @@ final answer, and this is also investigated here.
       first step. An exponential decay curve provides a good fit, with an $R^2$
       value of 0.9999998, very close to 1. Plotting on a logarithmic scale shows
       the straight line fit, the gradient of which is $\lambda$, giving $\lambda
+\todo{fix centering of cum plot}
       J^2 = 1.2334$, with a negligible error.}
   \label{fig:cumplots}
 \end{figure*}
 
 
-\begin{figure}[!ht]
+\begin{figure}%[!ht]
+  \begin{center}
+    \includegraphics[width=0.45\textwidth]{images/cum_line_plot_cutoff.pdf}
+    \caption{Histogram plotted on a logarithmic scale showing the Probability of
+      surviving to at least a particular step in an infinite square well with $J
+      = 20$, and also introducing a maximum number of steps at 2000, after which
+      all walkers will die. This saves computational resources but introduces
+      some systematic error, as there will now be a disproportionately high
+      number of walkers in the 2000 steps bin.}
+    \label{fig:cum_line_cutoff_plot}
+  \end{center}
+\end{figure}
+
+
+\begin{figure}%[!ht]
   \begin{center}
     \includegraphics[width=0.45\textwidth]{images/multiplot.pdf}
     \caption{Histogram plotted on a logarithmic scale showing the Probability of
@@ -286,22 +386,37 @@ final answer, and this is also investigated here.
 \end{figure}
 
 
-\begin{figure}[!ht]
-  \begin{center}
-    \includegraphics[width=0.45\textwidth]{images/cum_line_plot_cutoff.pdf}
-    \caption{Histogram plotted on a logarithmic scale showing the Probability of
-      surviving to at least a particular step in an infinite square well with $J
-      = 20$, and also introducing a maximum number of steps at 2000, after which
-      all walkers will die. This saves computational resources but introduces
-      some systematic error, as there will now be a disproportionately high
-      number of walkers in the 2000 steps bin.}
-    \label{fig:cum_line_cutoff_plot}
-  \end{center}
-\end{figure}
-
 \section{Conclusions}
 
-Sample Text
+In this investigation we demonstrated a method of calculating ground state
+energies of a quantum system using Random Walk computational simulations. The
+investigation focussed on an Infinite Square Well, but is easily extended to a
+Symmetric potential. The simualation was written in C++ to maximise performance
+and is available at \todo{cite}.
+
+The investigation explored the effects of varying the size of the well in
+determining the ground state energy of a quantum system, and showed that this
+method is more effective for larger wells, i.e. wells with larger
+boundaries. This is because for wells with larger boundaries, the walker can
+take a larger number of steps on average before dying, and thus can populate
+larger step bins. Thus, this method produces data that is close to the
+theoretical result for larger infinite square wells.
+
+The general theoretical result for the ground state energy of an infinite square
+well is $\frac{\pi^2}{8}\frac{\hbar^2}{mJ^2}$ where $J$ is the boundary of the
+well, and this method allows for the calculation of $\lambda R^2
+\frac{\hbar^2}{mJ^2}$, where $R$ also corresponds to the boundary of the
+well. Thus, we expect our calculated result to be $\lambda R^2 = \lambda J^2 =
+\frac{\pi^2}{8}$.
+
+This method provided $\lambda J^2 = 1.2339 \pm 0.0008$, which is very close to
+the theoretical result.
+
+This method can be easily extended to multiple dimensions with only a linear
+increase in time complexity for each added dimension. Thus, while this method
+may not be very efficient for low number of dimensions, it quickly becomes
+effective at a higher number of dimensions.
+
 
 
 % if have a single appendix:
