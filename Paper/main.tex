@@ -20,7 +20,8 @@
 \begin{document}
 
 % paper title
-\title{Using Random Walk Simulations to Calculate Ground State Energies in Quantum Physics}
+\title{Using Random Walk Simulations to Calculate Ground State Energies in
+  Quantum Physics}
 
 % author names 
 \author{Sai Pandian, ID: 29899923}%
@@ -177,7 +178,7 @@ death such that:
 where J is a well-defined boundary. So the walker cannot die inside the well but
 wil immediately die when they step outside, which we expect will definitely
 happen given sufficient time. Inside the well, the potential is simply that of a
-free particle:
+free particle \todo{cite}:
 
 \begin{equation}
   \frac{-\hbar^2}{2m}\frac{d^2 \psi}{dx^2} = E\psi(x)
@@ -207,75 +208,6 @@ well. The known ground state energy of an infnite square well is
 $\frac{\pi^2}{8}\frac{\hbar^2}{mJ^2}$ \todo{cite}, so we expect to find $\lambda
 R^2$ close to $\frac{\pi}{8}$.
 
-
-\section{Method}
-
-The Random walk is implemented computationally \todo{cite} and is extensible
-to multiple dimensions. For a $N$-dimensional lattice, at each point there are
-$2N$ possible directions for the walker to move. So a direction is selected
-randomly using a Mersenne Twister pseudorandom number generator (pRNG). This algorithm
-was chosen as it is a very fast implementation of a pRNG \todo{cite} and it
-passes many statistical randomness tests \todo{cite}, and has a very large
-period of $2^{19937-1}$.
-
-The random walk ends when a walker dies, with a
-specifically chosen $a(j)$. Initially, the $a(j)$ is chosen to be that of an
-infinite square well \todo{cite}, that is:
-\begin{equation}
-  \label{eq:squarewell}
-    a(j) =
-    \begin{cases}
-      0,& \text{if } j < J\\
-      \infty,& \text{if } j \geq J
-    \end{cases}
-    \nonumber
-\end{equation}
-where J is a well-defined boundary. So the walker has no chance of dying whilst
-within the well, but will die immediately once reaching the boundary. As
-explained in Section \ref{sec:TheoreticalBackground}, we expect that given
-sufficient time, all the walkers will reach the boundary and die. But in order
-to save computational resources, a maximum number of steps may also be defined,
-such that a walker will also die should they move that number of steps without
-reaching a boundary. This was not initially implemented, as it can introduce
-systematic errors, since there would be a disproportionate number of walkers dying
-on the maximum number of steps.
-
-Thus, the Schr\"{o}dinger equation inside a one-dimensional infinite square well
-is simply that of a free particle \todo{cite}:
-\begin{equation}
-  \frac{-\hbar^2}{2m}\frac{d^2 \psi}{dx^2} = E\psi(x)
-  \nonumber
-\end{equation}
-where $x$ is the position of the walker. By making the substitution $x = J
-\times j/R$, such that $j=R$ corresponds to the walker being at the boundary, we
-obtain:
-\begin{equation}
-  \begin{split}
-    -\frac{\hbar^2}{2m}\frac{R^2}{J^2}\frac{d^2\psi}{dj^2} &= E\psi(x)\\
-    -\frac{1}{2}\frac{d^2\psi}{dj^2} &= \frac{mJ^2E}{\hbar^2R^2}\psi(x)
-  \end{split}
-  \nonumber
-\end{equation}
-
-If we compare this to Equation \ref{eq:randomwave}, allowing $a(j) = 0$ inside
-the well, we see that:
-\begin{equation}
-  \begin{split}
-    \lambda &= \frac{mJ^2E}{\hbar^2R^2} \\
-    E &= \lambda R^2 \frac{\hbar^2}{mJ^2}
-  \end{split}
-  \nonumber
-\end{equation}
-
-So, by calculating the death rate $\lambda$, we can find the ground state energy
-of a particle in an infinite square well.
-
-But the known ground state of a particle in an infinite square well is
-$\frac{\pi^2}{8}\frac{\hbar^2}{mJ^2}$ \todo{cite}. This implies that we expect $\lambda
-R^2=\frac{\pi^2}{8}$ where R is the boundary of the well. Thus, we expect to
-find a $\lambda$ that is close to this theoretical value.
-
-
 To find the rate of death $\lambda$, we consider Equation \ref{eq:firsteq}. With
 some simple manipulation:
 \begin{equation}
@@ -293,10 +225,40 @@ some simple manipulation:
 
 Thus, by plotting the logarithm of the probability of surviving $n$ steps
 against the number of steps $n$, we can obtain the death rate $\lambda$ from the
-gradient.
+gradient of the line.
 
-Varying the boundary $J$ of the square well will affect the accuracy of the
-final answer, and this is also investigated here.
+\section{Method}
+We implemented the Random Walk simulation computationally in
+C++ in order to optimise the performance of the simulation, and thereby allow
+for a larger number of iterations and larger potential wells. The source code is
+available \cite{Pandian}. The simulation is easily extensible to multiple
+dimensions with a linear increase in time-complexity as the number of dimensions
+increases, but this investigation focused on a one-dimensional system.
+
+The random direction is selected using a pseudorandom number generator (pRNG)
+known as the Mersenne Twister. This algorithm was chosen as it is a very fast
+implementation of a pRNG \cite{Route2017}, passes many statistical randomness
+tests \cite{Bellamy2013}, and has a very large period of $2^{19937}-1$.
+
+We initially ran the simulation for a boundary of $J = 20$, with $1000000$
+walkers. The step on which each walker died was recorded so that a probability
+distribution showing the likelihood of dying on a particular step could be
+constructed.
+
+We then consider the probability that a walker will survive $n$ steps, and use
+the relationship between the number of walkers surviving $n$ steps and $n$ to
+determine the rate of death $\lambda$, as shown in Equation \ref{eq:straightline}.
+
+One method of reducing the computing time of the simulation is to introduce a
+maximum number of steps. The walker will die if they reach the boundary of the
+well, or if they reach this maximum number of steps, whichever happens
+first. However, this will introduce some systematic error into the simulation,
+as there will be a disproportionately high number of walkers dying on the
+maximum number of steps. We also investigated these effects here.
+
+We expect to see an effect on the accuracy of our final ground state depending
+on the size of the infinite well. We investigate these effects by comparing the
+calculated ground state energy to the theoretical energy for different sized wells.
 
 
 \section{Results and Discussion}
