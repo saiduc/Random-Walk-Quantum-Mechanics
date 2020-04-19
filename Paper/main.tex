@@ -23,7 +23,7 @@
 \title{Using Random Walk Simulations to Calculate Ground State Energies in Quantum Physics}
 
 % author names 
-\author{Sai Pandian, ID: 29899923}% <-this % stops a space
+\author{Sai Pandian, ID: 29899923}%
         
 % The report headers
 \markboth{PHYS6017 Computer Techniques in Physics Report 1, April 2020}
@@ -49,43 +49,52 @@
 % main body of the paper.
 \end{abstract}
 
-\begin{IEEEkeywords}
-keywords, temperature, xxxx equation, etc.
-\end{IEEEkeywords}
 
 \section{Introduction}
-% Here we have the typical use of a "W" for an initial drop letter
-% and "RITE" in caps to complete the first word.
-% You must have at least 2 lines in the paragraph with the drop letter
-% (should never be an issue)
+\IEEEPARstart{T}{he} developments in computer power in recent years has opened
+up the possibility for novel computational solutions to many problems that were
+otherwise limited. We now have access to computers that can numerically solve
+problems and run simulations that were previously too computationally intensive
+to do.
 
-\IEEEPARstart{R}{andom} walks are a simple model of motion in which a path is
-described as a succession of steps with each step being in a random direction on
-some vector space. Random walks are useful in modelling many physical processes
-that are perceived as having a pseudo-random mechanism \todo{cite}. Their
-applications range from Biology to the Stock Market. This paper aims to explore
-how Random Walk Simulations can be implemented to calculate the ground state
-energies of different quantum systems. \todo{more}
+One such problem is the calculation of the ground state energies of different
+quantum systems. Many methods exist for solving these problems, using both
+classical and quantum computational approaches. Whilst generally it may be true
+that Quantum computating approahes are more suited to solving such problems
+\cite{Mazzola}, these approaches are still in infancy and are not readily
+accessible. Thus, there exist an abundance of classical computing approaches,
+such as the Variational-Relaxiation algorithm \cite{Schroeder2017}. This is a
+particularly useful algorithm for two-dimensional systems with non-separable
+potentials but quickly becomes difficult to implement for more complex systems.
+
+In this investigation, I explore an alternative Monte Carlo method using Random
+Walk simulations, and demonstrate its efficacy with simple systems.
+
 
 \section{Theoretical Background}
 \label{sec:TheoreticalBackground}
 
-Random walks work descibe motion as a series of steps, with the direction of
-each step being random. Figure \ref{fig:cartoon} demonstrates this concept by
-considering a one-dimensional line. On this line, the ``walker'' starts at the
-origin, and walks a total of 20 steps. The walker at each step has a equal
-chance of stepping forwards, or stepping backwards.
+\subsection{Random Walk Simulations}
+
+Random walks descibe motion as a series of steps in some vector space, with the
+direction of each step being random, i.e. with there being an equal likelihood
+of a step in each possible direction. Consider a simple 1-dimensional line and a
+walker standing at a point labelled the origin. The walker takes 20 steps, the
+direction of each step (forwards or backwards on the line) is random. The
+position of the walker at each step is shown in Figure \ref{fig:cartoon}.
 
 \begin{figure}%[H]%%[!ht]
   \begin{center}
     \includegraphics[width=0.45\textwidth]{images/cartoon.pdf}
-    \caption{Illustrations, graphs, and photographs may fit across both columns,
-      if necessary. Your artwork must be in place in the article.}
+    \caption{The position of a walker at each step in a 20-step random walk
+      simulation. The average position of the walker does not necessarily remain
+      at the origin as one might naively expect. Instead it is normal for the
+      walker to finish the walk at some distance from the origin, as shown here.}
     \label{fig:cartoon}
   \end{center}
 \end{figure}
 
-As can be seen from the figure, it is not uncommon for the average position of
+As we can see from the figure, it is not uncommon for the average position of
 the walker to be away from the origin once the walk has concluded. This is
 because the position of the walker at any step is dependent only on the position
 at the previous step. If the walker happens to take a number of steps in the
@@ -98,56 +107,115 @@ In this example, the walker had an equal likelihood of stepping forward or
 backwards, but we can bias in one way if we want to model a particular
 phenomenon. The walk is also easily extensible to multiple dimensions, as for
 each extra dimension, one extra random number must be drawn. This gives a linear
-increase in time-complexity, which is convenient for long computations.
+increase in time-complexity, which is convenient for more complex systems.
 
-Random Walk simulations can be applied to calculate the ground state energies of
-Quantum Systems by solving the Schr\"{o}dinger equation \todo{cite}. Consider a
-one-dimensional simple lattice system. A walker can start at a position labelled
-the origin, and then proceed in a random walk. The random walk concludes after a
-certain number of steps or if the walker ``dies'' on a particular step. The
-probability that the walker will die is dependent on a defined potential at that
-point. For example, in an infinite square well system, the potential is 0 within
-a well, and infinite outside the well. So the walker will have no chance of
-dying whilst inside the well, but will die if they step outside.
+\subsection{Application to Quantum Systems}
+
+This investigation applied Random walk simulations to calculate the ground state
+energies of Quantum Systems by solving the Schr\"{o}dinger equation, as shown in
+\todo{cite}.
+
+We can extend the simple one-dimensional line model from Figure
+\ref{fig:cartoon} to a quantum system by imagining it as a one-dimensional
+simple lattice system. A walker can start at a position labelled the origin, and
+then proceed in a random walk. The random walk concludes if the walker ``dies''
+on a particular step. The probability that the walker will die is dependent on a
+defined potential at that point. For example, in an infinite square well system,
+the potential is 0 within a well, and infinite outside the well. So the walker
+will have no chance of dying whilst inside the well, but will die if they step
+outside.
 
 Let us define $p(j,n)$ as the probability that the walker will be at position
 $j$ after $n$ steps and $a(j)$ as the probability that the walker will die at
-position $j$. If we say:
+position $j$. Thus, for this to be the case, the walker would have had position
+$j\pm1$ after $n-1$ steps. Thus, we can say:
+
+\begin{equation}
+  p(j, n+1) =  \frac{1}{2}(1-a(j))(p(j-1,n) + p(j+1,n))
+  \nonumber
+\end{equation}
+
+If $a(j)$ is small and $n$ is large, we can use Taylor's expansion to expand
+each term in this expression and obtain a differential equation. If we then
+make the ansatz substitution:
 
 \begin{equation}
   p(j,n) = q(j) \exp(-\lambda n)
   \label{eq:firsteq}
 \end{equation}
-where $q(j)$ is an arbitrary function and $\lambda$ is the rate of death, then:
+where $q(j)$ is an arbitrary function and $\lambda$ is the rate of death, then
+we find:
+
 \begin{equation}
   -\frac{1}{2} \frac{d^2q(j)}{dj^2} + a(j)q(j) = \lambda q(j)
   \label{eq:randomwave}
 \end{equation}
+The full derivation is taken from \cite{MarcusNewton2020} and is shown in
+Appendix \ref{appendix:derivation}. Notice that Equation \ref{eq:randomwave} is
+in the form of the Schr\"{o}dinger equation:
 
-The full derivation is taken from \todo{cite} and is shown in Appendix
-\ref{appendix:derivation}.
-
-Notice that Equation \ref{eq:randomwave} is in the form of a wave equation,
-specifically the Schr\"{o}dinger equation:
 \begin{equation}
   \label{eq:schrodinger}
   \frac{-\hbar^2}{2m}\frac{d^2 \psi}{dr^2} + V(r)\psi(r) = E\psi(r)
 \end{equation}
 Comparing Equation \ref{eq:randomwave} and Equation \ref{eq:schrodinger}, we can
 see that the probability of death $a(j)$ is related to the potential $V(r)$,
-and the rate of death $\lambda$ is related to the Energy $E$. Thus, by running
-the simulation for a particular potential (i.e. rate of death), one can
-determine the ground state energy of a system by calculating the rate of
-death. This is the technique employed in this paper.
+and the rate of death $\lambda$ is related to the Energy $E$.
+
+We can extend this to an infinite square well by choosing our probability of
+death such that:
+
+\begin{equation}
+  \label{eq:squarewell}
+    a(j) =
+    \begin{cases}
+      0,& \text{if } j < J\\
+      \infty,& \text{if } j \geq J
+    \end{cases}
+    \nonumber
+\end{equation}
+where J is a well-defined boundary. So the walker cannot die inside the well but
+wil immediately die when they step outside, which we expect will definitely
+happen given sufficient time. Inside the well, the potential is simply that of a
+free particle:
+
+\begin{equation}
+  \frac{-\hbar^2}{2m}\frac{d^2 \psi}{dx^2} = E\psi(x)
+  \nonumber
+\end{equation}
+where $x$ is the position of the walker. By making the substitution
+$x=J\frac{j}{R}$, such that $j=R$ corresponds to the walker being at the
+boundary, we find:
+
+\begin{equation}
+  \begin{split}
+    -\frac{\hbar^2}{2m}\frac{R^2}{J^2}\frac{d^2\psi}{dj^2} &= E\psi(x)\\
+    -\frac{1}{2}\frac{d^2\psi}{dj^2} &= \frac{mJ^2E}{\hbar^2R^2}\psi(x)
+  \end{split}
+  \nonumber
+\end{equation}
+If we compare this to Equation \ref{eq:randomwave}, allowing $a(j) = 0$ inside
+the well, we see that:
+
+\begin{equation}
+  E = \lambda R^2 \frac{\hbar^2}{mJ^2}
+  \nonumber
+\end{equation}
+where only $\lambda$ is an unknown quantity. Thus, by calculating rate of death
+$\lambda$, we can calculate the ground state energy of the infinite square
+well. The known ground state energy of an infnite square well is
+$\frac{\pi^2}{8}\frac{\hbar^2}{mJ^2}$ \todo{cite}, so we expect to find $\lambda
+R^2$ close to $\frac{\pi}{8}$.
+
 
 \section{Method}
 
-The Random Walk is implemented computationally \todo{cite} and is extensible
+The Random walk is implemented computationally \todo{cite} and is extensible
 to multiple dimensions. For a $N$-dimensional lattice, at each point there are
 $2N$ possible directions for the walker to move. So a direction is selected
 randomly using a Mersenne Twister pseudorandom number generator (pRNG). This algorithm
 was chosen as it is a very fast implementation of a pRNG \todo{cite} and it
-passes many statistical randomness tests \todo{cite}, having a very large
+passes many statistical randomness tests \todo{cite}, and has a very large
 period of $2^{19937-1}$.
 
 The random walk ends when a walker dies, with a
@@ -189,8 +257,8 @@ obtain:
   \nonumber
 \end{equation}
 
-If we compare this to Equation \ref{eq:randomwave}, allowing $a(j) = 0$, we see
-that:
+If we compare this to Equation \ref{eq:randomwave}, allowing $a(j) = 0$ inside
+the well, we see that:
 \begin{equation}
   \begin{split}
     \lambda &= \frac{mJ^2E}{\hbar^2R^2} \\
@@ -352,11 +420,11 @@ and the theoretical result is within the range of the calculated answer.
       first step. An exponential decay curve provides a good fit, with an $R^2$
       value of 0.9999998, very close to 1. Plotting on a logarithmic scale shows
       the straight line fit, the gradient of which is $\lambda$, giving $\lambda
-\todo{fix centering of cum plot}
       J^2 = 1.2334$, with a negligible error.}
   \label{fig:cumplots}
 \end{figure*}
 
+\todo{fix centering of cum plot}
 
 \begin{figure}%[!ht]
   \begin{center}
@@ -389,7 +457,7 @@ and the theoretical result is within the range of the calculated answer.
 \section{Conclusions}
 
 In this investigation we demonstrated a method of calculating ground state
-energies of a quantum system using Random Walk computational simulations. The
+energies of a quantum system using Random walk computational simulations. The
 investigation focussed on an Infinite Square Well, but is easily extended to a
 Symmetric potential. The simualation was written in C++ to maximise performance
 and is available at \todo{cite}.
@@ -409,8 +477,8 @@ well, and this method allows for the calculation of $\lambda R^2
 well. Thus, we expect our calculated result to be $\lambda R^2 = \lambda J^2 =
 \frac{\pi^2}{8}$.
 
-This method provided $\lambda J^2 = 1.2339 \pm 0.0008$, which is very close to
-the theoretical result.
+This method provided $\lambda J^2 = 1.2339 \pm 0.0008$, which lies within the
+range of the theoretical result.
 
 This method can be easily extended to multiple dimensions with only a linear
 increase in time complexity for each added dimension. Thus, while this method
@@ -436,7 +504,7 @@ effective at a higher number of dimensions.
 
 
 \appendices
-\section{Random Walk Schr\"{o}dinger Equation Derivation}
+\section{Random walk Schr\"{o}dinger Equation Derivation}
 \label{appendix:derivation}
 Let us denote the probability that the walker is at position $j$ after $n$ steps
 as $p(j,n)$ and the probabilty that the walker will die at position $j$ as
