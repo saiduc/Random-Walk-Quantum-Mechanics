@@ -281,10 +281,10 @@ def spatial_plot(data, dimen, show=True, bins=100):
 
 if __name__ == "__main__":
 
-    dimen = 2
+    dimen = 1
     iteration = 1000000
     maxSteps = 0
-    potential = "circle"
+    potential = "square"
     boundary = 20
     prob = 0.1
 
