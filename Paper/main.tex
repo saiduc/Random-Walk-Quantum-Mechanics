@@ -36,18 +36,6 @@
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract}
-% Provide a summary of the session. What was done, what measurements were taken,
-% brief methods, what calculations, brief conclusion.  The Abstract should be
-% approximately 250 words or fewer, italicized, in 10-point Times (or Times
-% Roman.) Please leave two spaces between the Abstract and the heading of your
-% first section.  It should briefly summarize the essence of the paper and address
-% the following areas without using specific subsection titles. Objective: Briefly
-% state the problem or issue addressed, in language accessible to a general
-% scientific audience. Technology or Method: Briefly summarize the technological
-% innovation or method used to address the problem. Results: Provide a brief
-% summary of the results and findings. Conclusions: Give brief concluding remarks
-% on your outcomes. Detailed discussion of these aspects should be provided in the
-% main body of the paper.
   In this paper, we present a novel way of calculating ground state energies for
   a quantum simulation using a Random Walk Monte Carlo simulation. The random
   walk consists of a walker making steps in random directions, with each step
@@ -63,6 +51,7 @@
   having very small variance in repeats. The method is extensible to higher
   dimensions, with a linear increase in time-complexity for each added dimension.
 \end{abstract}
+
 
 
 \section{Introduction}
@@ -420,7 +409,7 @@ systematic error introduced. This is the method used in this investigation.
 
 \begin{figure}[!ht]
   \begin{center}
-    \includegraphics[width=0.45\textwidth]{images/multiplot1.pdf}
+    \includegraphics[width=0.45\textwidth]{images/multiplot.pdf}
     \caption{Histogram plotted on a logarithmic scale showing the Probability of
       surviving to at least a particular step in different infinite square wells
       with different boundaries $J$. The simulations were run with $10000$
