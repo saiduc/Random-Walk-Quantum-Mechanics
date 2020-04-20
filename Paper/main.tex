@@ -49,7 +49,19 @@
 % on your outcomes. Detailed discussion of these aspects should be provided in the
 % main body of the paper.
   In this paper, we present a novel way of calculating ground state energies for
-  a quantum simulation using a Random Walk Monte Carlo simulation.
+  a quantum simulation using a Random Walk Monte Carlo simulation. The random
+  walk consists of a walker making steps in random directions, with each step
+  having a probability of causing the walker to die and the random walk to end,
+  with the probability determined by a function of position. The function can be
+  chosen to model specific quantum systems. The rate of death of the walkers is
+  used to calculate the ground state energy.
+
+  This paper explores the efficacy of such a method in reproducing the known
+  ground state energy of an infinite square well, and the extensibility of the
+  method to more complex systems. We found that this method is very good at
+  reproducing the known results to a high precision, and with good reliability,
+  having very small variance in repeats. The method is extensible to higher
+  dimensions, with a linear increase in time-complexity for each added dimension.
 \end{abstract}
 
 
@@ -72,7 +84,6 @@ potentials but quickly becomes difficult to implement for more complex systems.
 
 In this investigation, we explore an alternative Monte Carlo method using Random
 Walk simulations, and demonstrate its efficacy with simple systems.
-
 
 \section{Theoretical Background}
 \label{sec:TheoreticalBackground}
