@@ -46,8 +46,8 @@
   such a method in reproducing the known ground state energy of an infinite
   square well, and the extensibility of the method to more complex
   systems. Using the infinite square well example, the simulation found the
-  energy proportionality to be $1.2339 \pm 0.0008$, which is consister to high
-  precision with the known $\frac{pi^2}{8}$ theoretical constant. Thus, we found
+  energy proportionality to be $1.2339 \pm 0.0008$, which is consistent to high
+  precision with the known $\frac{\pi^2}{8}$ theoretical constant. Thus, we found
   that this method is very good at reproducing the known results to a high
   precision, and with good reliability, having very small variance in
   repeats. The method is extensible to higher dimensions, with a linear increase
@@ -64,10 +64,10 @@ problems and run simulations that were previously too computationally intensive
 to do.  One such problem is the calculation of the ground state energies of
 different quantum systems. Many methods exist for solving these problems, using
 both classical and quantum computational approaches. Whilst generally it may be
-true that Quantum computating approahes are more suited to solving such problems
+true that Quantum computing approaches are more suited to solving such problems
 \cite{Mazzola}, these approaches are still in infancy and are not readily
 accessible. Thus, there exist an abundance of classical computing approaches,
-such as the Variational-Relaxiation algorithm \cite{Schroeder2017}. This is a
+such as the Variational-Relaxation algorithm \cite{Schroeder2017}. This is a
 particularly useful algorithm for two-dimensional systems with non-separable
 potentials but quickly becomes difficult to implement for more complex systems.
 
@@ -81,7 +81,7 @@ its effectiveness for more complicated systems.
 
 \subsection{Random Walk Simulations}
 
-Random walks descibe motion as a series of steps in some vector space, with the
+Random walks describe motion as a series of steps in some vector space, with the
 direction of each step being random, i.e. with there being an assigned likelihood
 of a step in each possible direction. Consider a simple 1-dimensional line and a
 walker standing at a point labelled the origin. The walker takes 20 steps, the
@@ -180,7 +180,7 @@ death such that:
     \nonumber
 \end{equation}
 where J is a well-defined boundary. So the walker cannot die inside the well but
-wil immediately die when they step outside, which we expect will mostly
+will immediately die when they step outside, which we expect will mostly
 happen given sufficient time. Inside the well, the potential is simply that of a
 free particle \cite{Bransden2003}:
 
@@ -208,7 +208,7 @@ the well, we see that:
 \end{equation}
 where only $\lambda$ is an unknown quantity. Thus, by calculating rate of death
 $\lambda$, we can calculate the ground state energy of the infinite square
-well. The known ground state energy of an infnite square well is
+well. The known ground state energy of an infinite square well is
 $\frac{\pi^2}{8}\frac{\hbar^2}{mJ^2}$ \cite{Davies1998}, so we expect to find $\lambda
 R^2$ close to $\frac{\pi^2}{8}$.
 
@@ -305,7 +305,7 @@ walkers. We found the energy constant to be $1.2339 \pm 0.0008$, calculated from
 the probability distribution of survival at a particular step. The probability
 that a walker will survive at a particular step is simply the 1 minus the
 normalised cumulative sum of walkers dying at each step. Figure
-\ref{fig:cumplots} presents this probability and confirms the Anstatz of the
+\ref{fig:cumplots} presents this probability and confirms the ansatz of the
 exponential function. The curve has been fitted with an exponential function of
 the form in Equation \ref{eq:firsteq}. The gradient of Figure
 \ref{fig:cumloghist} allowed for calculation of death rate which from Equation
@@ -334,13 +334,13 @@ survive at least the first step. The reason for this is twofold:
   a number of steps less than $J$
 \item It is highly unlikely that the walker will die at a number of steps
   greater than but still close to $J$ since it would require walking in the same
-  direction a dispropotionate number of times.
+  direction a disproportionate number of times.
 \end{itemize}
 
 \begin{figure}[H]%[!ht]
   \begin{center}
     \includegraphics[width=0.45\textwidth]{images/exp_plot.pdf}
-    \caption{The probability of dying on a particular step in an infnite square
+    \caption{The probability of dying on a particular step in an infinite square
       well with $J=20$. As can be seen, the peak is away from the origin. This
       is because, for a well with boundary $J$, the minimum number of steps a
       walker must take is $J$. However, it is still unlikely that the walker
@@ -366,7 +366,7 @@ exponential curve. It is for this reason that the histogram in Figure
 \begin{figure}%[!ht]
   \begin{center}
     \includegraphics[width=0.45\textwidth]{images/line_plot.pdf}
-    \caption{The probability of dying on a particular step in an infnite square
+    \caption{The probability of dying on a particular step in an infinite square
       well with $J=20$ as in Figure \ref{fig:hist}, plotted on a logarithmic
       scale. As explained for Figure \ref{fig:hist}, the peak probability is on
       a step greater than $J$. This is clear in this plot. It is also evident
@@ -397,7 +397,7 @@ the spread is present as the fluctuations.
   logarithmic scale]
   {\includegraphics[width=0.5\textwidth]{images/cum_line_plot_cutoff.pdf}
   \label{fig:cum_line_cutoff_plot}}
-  \caption{Histograms showing the results of the simulation when a maximm number
+  \caption{Histograms showing the results of the simulation when a maximum number
   of steps is introduced. If a walker reaches this number of steps, they
   automatically die, regardless of position. This results in a
   disproportionately high number of walkers dying at this maximum number, 2000
@@ -448,7 +448,7 @@ theoretical value as $J$ increases. This is due to the fact that as $J$
 increases, there are more walkers surviving to larger number of steps. Thus, we
 can say that using a larger value of $J$ will result in a more accurate answer
 but will also be more computationally intensive and take longer. Thus, we make a
-tradeoff between speed and accuracy and choose $J=20$ for the final
+trade-off between speed and accuracy and choose $J=20$ for the final
 investigation.
 
 Running the simulation 10 times with 1000000 walkers in an infinite square well
@@ -469,7 +469,7 @@ and the theoretical result is within the range of the calculated answer.
 In this investigation we demonstrated a method of calculating ground state
 energies of a quantum system using Random walk computational simulations. The
 investigation focussed on a one dimensional infinite square well, but can easily
-be extended to more complex systems such as a cirular well in two dimensions.
+be extended to more complex systems such as a circular well in two dimensions.
 
 The investigation explored the effects of varying the size of the well in
 determining the ground state energy of a quantum system, and showed that this
@@ -495,7 +495,7 @@ effective at a higher number of dimensions.
 \label{appendix:derivation}
 Consider a one-dimensional lattice upon which a walker is undergoing a random
 walker. Let us denote the probability that the walker is at position $j$ after
-$n$ steps as $p(j,n)$ and the probabilty that the walker will die at position
+$n$ steps as $p(j,n)$ and the probability that the walker will die at position
 $j$ as $a(j)$. We will denote the position-step number coordinates as $[j,
 n]$. Thus, for a walker to have coordinates $[j, n+1]$, in the previous step,
 they must have had coordinates $[j \pm 1, n]$. So we can say:
@@ -544,5 +544,3 @@ their product is neglected. We also let $p(j,n) = q(j) \exp(-\lambda n)$ so that
 \printbibliography
 
 \end{document}
-
-
