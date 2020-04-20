@@ -47,7 +47,7 @@ def exp_plot(data, show=True, skip=0, start=1):
     x = hist[1][skip:-1]
     y = hist[0][skip:]
 
-    popt, _ = curve_fit(exp_curve, x, y)
+    # popt, _ = curve_fit(exp_curve, x, y)
 
     if show:
         # plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
@@ -55,10 +55,9 @@ def exp_plot(data, show=True, skip=0, start=1):
         plt.ylabel('Probability of Death')
         plt.xlabel('Time Survived (no. of steps)')
         plt.tight_layout()
-        plt.savefig("./Paper/images/exp_plot.pdf")
+        # plt.savefig("./Paper/images/exp_plot.pdf")
         # plt.savefig("./Paper/images/exp_plot_cutoff.pdf")
         plt.show()
-    return popt[1]
 
 
 def cum_exp_plot(data, show=True, skip=0, start=1):
@@ -90,7 +89,7 @@ def cum_exp_plot(data, show=True, skip=0, start=1):
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
         plt.tight_layout()
-        plt.savefig("./Paper/images/cum_exp_plot.pdf")
+        # plt.savefig("./Paper/images/cum_exp_plot.pdf")
         # plt.savefig("./Paper/images/cum_exp_plot_cutoff.pdf")
         plt.show()
 
@@ -117,7 +116,7 @@ def line_plot(data, show=True, skip=0, start=1):
     x = hist[1][skip:-1]
     y = hist[0][skip:]
 
-    popt, _ = curve_fit(exp_curve, x, y)
+    # popt, _ = curve_fit(exp_curve, x, y)
 
     if show:
         plt.yscale("log")
@@ -127,9 +126,8 @@ def line_plot(data, show=True, skip=0, start=1):
         plt.ylabel('Probability of Death')
         plt.xlabel('Time Survived (no. of steps)')
         plt.tight_layout()
-        plt.savefig("./Paper/images/line_plot.pdf")
+        # plt.savefig("./Paper/images/line_plot.pdf")
         plt.show()
-    return popt[1]
 
 
 def cum_line_plot(data, show=True, skip=0, start=1):
@@ -158,7 +156,7 @@ def cum_line_plot(data, show=True, skip=0, start=1):
         plt.xlabel('Time Survived (no. of steps)')
         plt.legend()
         plt.tight_layout()
-        plt.savefig("./Paper/images/cum_line_plot.pdf")
+        # plt.savefig("./Paper/images/cum_line_plot.pdf")
         # plt.savefig("./Paper/images/cum_line_plot_cutoff.pdf")
         plt.show()
 
@@ -251,16 +249,42 @@ def compare_boundaries(start, repeats):
     plt.xlabel('Time Survived (no. of steps)')
     plt.legend()
     plt.tight_layout()
-    plt.savefig("./Paper/images/multiplot.pdf")
+    # plt.savefig("./Paper/images/multiplot.pdf")
     plt.show()
+
+
+def spatial_plot(data, dimen, show=True, bins=100):
+    nbins = bins
+
+    positions = np.loadtxt("positions.dat")
+    pos = [positions[n:n+dimen] for n in range(0, len(positions), dimen)]
+    x_pos = []
+    y_pos = []
+    for i in pos:
+        x_pos.append(i[0])
+        y_pos.append(i[1])
+    
+    plt.rc('text', usetex=True)
+    plt.rc('font', family='serif')
+
+    if show:
+
+        plt.hist2d(x_pos, y_pos, bins=nbins)
+        plt.ylabel('y Coordinate')
+        plt.xlabel('x Coordinate')
+        plt.tight_layout()
+
+        plt.show()
+
+    return pos
 
 
 if __name__ == "__main__":
 
-    dimen = 1
+    dimen = 2
     iteration = 1000000
-    maxSteps = 2000
-    potential = "square"
+    maxSteps = 0
+    potential = "circle"
     boundary = 20
     prob = 0.1
 
@@ -268,8 +292,8 @@ if __name__ == "__main__":
     if potential == "":
         run_model(dimen, iteration, prob=prob)
         data = np.loadtxt("data.dat")
-        prob_arrest_curve = exp_plot(data, show=True, skip=0)
-        prob_arrest_line = line_plot(data, show=True, skip=0)
+        exp_plot(data, show=True, skip=0)
+        line_plot(data, show=True, skip=0)
 
     # infinite square well
     if potential == "square":
@@ -279,12 +303,28 @@ if __name__ == "__main__":
                   potential=potential,
                   boundary=boundary)
         data = np.loadtxt("data.dat")
-        prob_arrest_curve = exp_plot(data, show=True, skip=0, start=boundary)
-        prob_arrest_line = line_plot(data, show=True, skip=0, start=boundary)
+        exp_plot(data, show=True, skip=0, start=boundary)
+        line_plot(data, show=True, skip=0, start=boundary)
         prob_arrest_cum_curve = cum_exp_plot(data, show=True, skip=100, start=boundary)
         prob_arrest_cum_line = cum_line_plot(data, show=True, skip=100, start=boundary)
+
+        print(prob_arrest_cum_line * boundary**2)
 
         avg, error = average_value(1, 1000000, maxSteps=0, prob=0.1, potential="square", boundary=20, skip=100, repeats=10)
         print(avg, " ± ", error[1])
 
         compare_boundaries(14, 4)
+
+    # circular well
+    if potential == "circle":
+        run_model(dimen,
+                  iteration,
+                  maxSteps=maxSteps,
+                  potential=potential,
+                  boundary=boundary)
+        data = np.loadtxt("data.dat")
+
+        prob_arrest_cum_line = cum_line_plot(data, show=True, skip=100, start=boundary)
+        print(prob_arrest_cum_line * boundary**2)
+
+        spatial_plot(data, dimen, show=True, bins=100)

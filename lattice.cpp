@@ -72,6 +72,12 @@ public:
 		}
 	}
 
+	void addPosition(vector<int> pos){
+		for(int i=0; i<coordinates.size(); i++){
+			pos.push_back(coordinates[i]);
+		}
+	}
+
 	// resets lattice to start position
 	void reset(int d){
 		vector<int> coordinates_new;
@@ -182,6 +188,7 @@ int main(int argc, char* argv[]){
 
 	
 	vector<int> data;
+	vector<int> positions;
 
 	// run the random walk
 	for(int i=0; i<iterations; i++){
@@ -196,6 +203,12 @@ int main(int argc, char* argv[]){
 			caught = lattice.caught(probability, potential, boundary, maxSteps);
 		}
 		// append to data
+
+		if(potential == "circle"){
+			for(int i=0; i<lattice.coordinates.size(); i++){
+				positions.push_back(lattice.coordinates[i]);
+			}
+		}
 		data.push_back(time);
 	}
 
@@ -205,5 +218,13 @@ int main(int argc, char* argv[]){
 		myfile << data[i] << "\n";
 	}
 	myfile.close();
+
+	ofstream myfile1;
+	myfile1.open("positions.dat");
+	for(int i=0; i<positions.size(); i++){
+		myfile1 << positions[i] << "\n";
+	}
+	myfile1.close();
+	
 	return 0;
 }
