@@ -50,11 +50,11 @@ public:
 		// int direction = rand()%dimensions;
 		// int distance = rand()%2;
 
-		uniform_int_distribution<> distribution(0,dimensions-1);
-		int direction = distribution(generator);
+		uniform_int_distribution<> distribution1(0,dimensions-1);
+		int direction = distribution1(generator);
 
-		uniform_int_distribution<> distribution(0,1);
-		int distance = distribution(generator);
+		uniform_int_distribution<> distribution2(0,1);
+		int distance = distribution2(generator);
 
 		// so that distance is always -1 or 1
 		if(distance == 0){
