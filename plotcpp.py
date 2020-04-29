@@ -292,7 +292,7 @@ if __name__ == "__main__":
         exp_plot(data, show=True, skip=0)
         line_plot(data, show=True, skip=0)
 
-a   # infinite square well
+    # infinite square well
     if potential == "square":
         run_model(dimen,
                   iteration,
