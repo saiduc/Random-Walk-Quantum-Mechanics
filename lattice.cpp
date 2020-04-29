@@ -83,7 +83,7 @@ public:
 
 
 	// caught function
-	bool caught(double probability=0.1, string potential="", int boundary=0, int maxSteps=0){
+	bool caught(double probability=0.1, string potential="", int boundary=0, int maxSteps=0, int energy=0){
 
 		if((maxSteps == 0) || (numberSteps < maxSteps)){
 			if(potential == ""){
@@ -114,6 +114,21 @@ public:
 				if(!(tmp < boundary)){
 					return true;
 				}
+
+				// check if the walker is at the x axis
+				if(energy == 1){
+					if(coordinates[0] == 0){
+						return true;
+					}
+				}
+
+				// check if the walker is at x or y axis
+				else if(energy == 2){
+					if((coordinates[0] == 0) || (coordinates[1] == 0)){
+						return true;
+					}
+				}
+				
 				return false;
 			}
 			
@@ -152,6 +167,7 @@ int main(int argc, char* argv[]){
 	string potential = argv[5];
 	int boundary = atoi(argv[6]);
 	int randomise = atoi(argv[7]);
+	int energy = atoi(argv[8]);
 
 	// cout << dimen << endl;
 	// cout << probability << endl;
@@ -177,7 +193,7 @@ int main(int argc, char* argv[]){
 		while(caught != true){
 			time++;
 			lattice.move();
-			caught = lattice.caught(probability, potential, boundary, maxSteps);
+			caught = lattice.caught(probability, potential, boundary, maxSteps, energy);
 		}
 		// append to data
 
