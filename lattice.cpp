@@ -104,6 +104,25 @@ public:
 		// cout << numberSteps << endl;
 	}
 
+	// randomise position, only works in 2d Circular well
+	void randomisePosition(int boundary){
+
+		int x = boundary;
+		int y = boundary;
+
+		while(sqrt((x * x) + (y * y)) < boundary){
+			uniform_int_distribution<> distribution3(0, boundary);
+			x = distribution3(generator);
+
+			uniform_int_distribution<> distribution4(0,boundary);
+			y = distribution3(generator);
+		}
+
+		coordinates[0] = x;
+		coordinates[1] = y;
+	}
+
+
 	// caught function
 	bool caught(double probability=0.1, string potential="", int boundary=0, int maxSteps=0){
 
@@ -153,6 +172,7 @@ public:
 };
 
 
+// prints a vector for debugging
 void printVector(vector<int> item){
 	for(int i=0; i<item.size(); i++){
 		cout << item[i] << endl;
@@ -172,6 +192,7 @@ int main(int argc, char* argv[]){
 	double probability = atof(argv[4]);
 	string potential = argv[5];
 	int boundary = atoi(argv[6]);
+	int randomise = atoi(argv[7]);
 
 	// cout << dimen << endl;
 	// cout << probability << endl;
@@ -186,7 +207,10 @@ int main(int argc, char* argv[]){
 
 	// run the random walk
 	for(int i=0; i<iterations; i++){
-		lattice.reset(dimen);
+
+		if(randomise == 1){lattice.randomisePosition(boundary);}
+
+		else{lattice.reset(dimen);}
 
 
 		bool caught = false;
