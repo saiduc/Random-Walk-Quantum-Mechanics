@@ -166,8 +166,7 @@ int main(int argc, char* argv[]){
 	double probability = atof(argv[4]);
 	string potential = argv[5];
 	int boundary = atoi(argv[6]);
-	int randomise = atoi(argv[7]);
-	int energy = atoi(argv[8]);
+	int energy = atoi(argv[7]);
 
 	// cout << dimen << endl;
 	// cout << probability << endl;
@@ -183,7 +182,7 @@ int main(int argc, char* argv[]){
 	// run the random walk
 	for(int i=0; i<iterations; i++){
 
-		if(randomise == 1){lattice.randomisePosition(boundary);}
+		if(energy != 0){lattice.randomisePosition(boundary);}
 
 		else{lattice.reset(dimen);}
 

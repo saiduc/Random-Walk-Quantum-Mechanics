@@ -15,7 +15,7 @@ font = {'family': 'normal',
 matplotlib.rc('font', **font)
 
 
-def run_model(dimen, iteration, maxSteps=0, prob=0.1, potential="", boundary=3, randomise=0, energy=0):
+def run_model(dimen, iteration, maxSteps=0, prob=0.1, potential="", boundary=3, energy=0):
     print('Compiling...')
     call(['g++', 'lattice.cpp', '-o', 'lattice'])
     print('Compilation successful!')
@@ -29,7 +29,6 @@ def run_model(dimen, iteration, maxSteps=0, prob=0.1, potential="", boundary=3, 
         str(prob),
         str(potential),
         str(boundary),
-        str(randomise),
         str(energy)
     ])
     print('Model complete!')
@@ -284,7 +283,6 @@ if __name__ == "__main__":
     potential = "circle"
     boundary = 20
     prob = 0.1
-    randomise = 1
     energy = 2
 
     # constant potential
@@ -294,7 +292,7 @@ if __name__ == "__main__":
         exp_plot(data, show=True, skip=0)
         line_plot(data, show=True, skip=0)
 
-    # infinite square well
+a   # infinite square well
     if potential == "square":
         run_model(dimen,
                   iteration,
@@ -321,7 +319,6 @@ if __name__ == "__main__":
                   maxSteps=maxSteps,
                   potential=potential,
                   boundary=boundary,
-                  randomise=randomise,
                   energy=energy)
 
         spatial_plot(dimen, show=True, bins=100, sigma=4)
