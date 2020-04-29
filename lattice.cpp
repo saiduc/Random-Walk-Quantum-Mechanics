@@ -10,45 +10,6 @@
 
 using namespace std;
 
-/*
-  <random> is recommended in C++ over using rand because rand is seeded with
-  time, but this is updated only every second. So if we were to for some
-  reason run the file several times within the same second, we would get
-  the exact same results.
-
-  <random> is also recommended over rand() since:
-
-  rand() is typically a low quality pRNG and not suitable for applications 
-  that need a reasonable level of unpredictability. <random> provides a 
-  variety of engines with different characteristics suitable for many 
-  different use cases.
-  
-  We say rand() is aa poor quality pRNG because if we generate a sequence of
-  numbers and then group them in 2's and plot as coordinates, we will see patterns.
-
-  Converting the results of rand() into a number you can use directly usually 
-  relies on code that is difficult to read and easy to get wrong, whereas 
-  using <random> distributions is easy and produces readable code.
-
-  The common methods of generating values in a given distribution using 
-  rand() further decrease the quality of the generated data. % generally biases 
-  the data and floating point division still produces non-uniform distributions. 
-  <random> distributions are higher quality as well as more readable.
-
-  rand() relies on a hidden global resource. Among other issues this causes 
-  rand() to not be thread safe. Some implementations make thread safety guarantees,
-  but this is not required standard. Engines provided by <random> encapsulate 
-  pRNG state as objects with value semantics, allowing flexible control over the state.
-
-  srand() only permits a limited range of seeds. Engines in <random> can be initialized 
-  using seed sequences which permit the maximum possible seed data. seed_seq also 
-  implements a common pRNG warm-up.
-  
-  from StackOverflow answer: 
-  https://stackoverflow.com/questions/18726102/what-difference-between-rand-and-random-functions
-  https://channel9.msdn.com/Events/GoingNative/2013/rand-Considered-Harmful
-*/
-
 // set up random generator and define seed for each
 random_device rd;
 mt19937 generator(rd());
@@ -89,11 +50,11 @@ public:
 		// int direction = rand()%dimensions;
 		// int distance = rand()%2;
 
-		uniform_int_distribution<> distribution1(0,dimensions-1);
-		int direction = distribution1(generator);
+		uniform_int_distribution<> distribution(0,dimensions-1);
+		int direction = distribution(generator);
 
-		uniform_int_distribution<> distribution2(0,1);
-		int distance = distribution2(generator);
+		uniform_int_distribution<> distribution(0,1);
+		int distance = distribution(generator);
 
 		// so that distance is always -1 or 1
 		if(distance == 0){
@@ -111,11 +72,9 @@ public:
 		int y = boundary;
 
 		while(sqrt((x * x) + (y * y)) > boundary){
-			uniform_int_distribution<> distribution3(-boundary, boundary);
-			x = distribution3(generator);
-
-			uniform_int_distribution<> distribution4(-boundary,boundary);
-			y = distribution3(generator);
+			uniform_int_distribution<> distribution(-boundary, boundary);
+			x = distribution(generator);
+			y = distribution(generator);
 		}
 
 		coordinates[0] = x;
@@ -128,8 +87,8 @@ public:
 
 		if((maxSteps == 0) || (numberSteps < maxSteps)){
 			if(potential == ""){
-				uniform_real_distribution<double> distribution3(0.0,1.0);
-				double number = distribution3(generator);
+				uniform_real_distribution<double> distribution(0.0,1.0);
+				double number = distribution(generator);
 			
 				if(number <= probability){
 					return true;
