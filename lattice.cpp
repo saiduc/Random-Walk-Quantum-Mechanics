@@ -72,12 +72,6 @@ public:
 		}
 	}
 
-	void addPosition(vector<int> pos){
-		for(int i=0; i<coordinates.size(); i++){
-			pos.push_back(coordinates[i]);
-		}
-	}
-
 	// resets lattice to start position
 	void reset(int d){
 		vector<int> coordinates_new;
