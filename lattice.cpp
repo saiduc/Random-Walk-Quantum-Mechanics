@@ -110,11 +110,11 @@ public:
 		int x = boundary;
 		int y = boundary;
 
-		while(sqrt((x * x) + (y * y)) < boundary){
-			uniform_int_distribution<> distribution3(0, boundary);
+		while(sqrt((x * x) + (y * y)) > boundary){
+			uniform_int_distribution<> distribution3(-boundary, boundary);
 			x = distribution3(generator);
 
-			uniform_int_distribution<> distribution4(0,boundary);
+			uniform_int_distribution<> distribution4(-boundary,boundary);
 			y = distribution3(generator);
 		}
 
