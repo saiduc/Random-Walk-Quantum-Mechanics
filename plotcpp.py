@@ -271,7 +271,7 @@ def spatial_plot(dimen, show=True, bins=100, sigma=16):
 
         plt.ylabel('y Coordinate')
         plt.xlabel('x Coordinate')
-        # plt.tight_layout()
+        plt.tight_layout()
 
         plt.show()
 
@@ -304,15 +304,12 @@ if __name__ == "__main__":
         data = np.loadtxt("data.dat")
         exp_plot(data, show=True, skip=0, start=boundary)
         line_plot(data, show=True, skip=0, start=boundary)
-        prob_arrest_cum_curve = cum_exp_plot(
-            data, show=True, skip=100, start=boundary)
-        prob_arrest_cum_line = cum_line_plot(
-            data, show=True, skip=100, start=boundary)
+        prob_arrest_cum_curve = cum_exp_plot(data, show=True, skip=100, start=boundary)
+        prob_arrest_cum_line = cum_line_plot(data, show=True, skip=100, start=boundary)
 
         print(prob_arrest_cum_line * boundary**2)
 
-        avg, error = average_value(
-            1, 1000000, maxSteps=0, prob=0.1, potential="square", boundary=20, skip=100, repeats=10)
+        avg, error = average_value(1, 1000000, maxSteps=0, prob=0.1, potential="square", boundary=20, skip=100, repeats=10)
         print(avg, " ± ", error[1])
 
         compare_boundaries(14, 4)
