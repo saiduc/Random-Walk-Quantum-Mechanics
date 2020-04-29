@@ -1,9 +1,11 @@
 import matplotlib
+import matplotlib.cm as cm
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 from subprocess import call
 import warnings
+from scipy.ndimage.filters import gaussian_filter
 warnings.filterwarnings("ignore")
 
 font = {'family': 'normal',
@@ -13,7 +15,7 @@ font = {'family': 'normal',
 matplotlib.rc('font', **font)
 
 
-def run_model(dimen, iteration, maxSteps=0, prob=0.1, potential="", boundary=3):
+def run_model(dimen, iteration, maxSteps=0, prob=0.1, potential="", boundary=3, randomise=0, energy=0):
     print('Compiling...')
     call(['g++', 'lattice.cpp', '-o', 'lattice'])
     print('Compilation successful!')
@@ -26,7 +28,9 @@ def run_model(dimen, iteration, maxSteps=0, prob=0.1, potential="", boundary=3):
         str(maxSteps),
         str(prob),
         str(potential),
-        str(boundary)
+        str(boundary),
+        str(randomise),
+        str(energy)
     ])
     print('Model complete!')
 
@@ -36,9 +40,8 @@ def exp_curve(n, q, arrest):
 
 
 def exp_plot(data, show=True, skip=0, start=1):
-    # nbins = int(max(data) - start)
     nbins = int(int(max(data) - start)/2)
-    # plt.style.use("seaborn")
+
     plt.rc('text', usetex=True)
     plt.rc('font', family='serif')
 
@@ -47,11 +50,8 @@ def exp_plot(data, show=True, skip=0, start=1):
     x = hist[1][skip:-1]
     y = hist[0][skip:]
 
-    # popt, _ = curve_fit(exp_curve, x, y)
-
     if show:
-        # plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
-
+        plt.bar(x, y, width=2, aligh='center')
         plt.ylabel('Probability of Death')
         plt.xlabel('Time Survived (no. of steps)')
         plt.tight_layout()
@@ -61,9 +61,8 @@ def exp_plot(data, show=True, skip=0, start=1):
 
 
 def cum_exp_plot(data, show=True, skip=0, start=1):
-    # nbins = int(max(data) - start)
     nbins = int(int(max(data) - start)/2)
-    # plt.style.use("seaborn")
+
     plt.rc('text', usetex=True)
     plt.rc('font', family='serif')
 
@@ -73,15 +72,12 @@ def cum_exp_plot(data, show=True, skip=0, start=1):
     x = hist[1][skip:-1]
     y = hist[0][skip:]
 
-    # normalising it myself since normed=True doesn't seem to work
-    # y = y/np.sum(y)
     cum_y = np.cumsum(y[::-1])[::-1]
     cum_y = cum_y/max(cum_y)
 
     popt, pcov = curve_fit(exp_curve, x, cum_y, p0=[1.28, 0.019])
 
     if show:
-        # plt.plot(x, cum_y)
         plt.bar(x, cum_y, width=2, align='center')
         plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
 
@@ -104,9 +100,8 @@ def cum_exp_plot(data, show=True, skip=0, start=1):
 
 
 def line_plot(data, show=True, skip=0, start=1):
-    # nbins = int(max(data) - start)
     nbins = int(int(max(data) - start)/2)
-    # plt.style.use("seaborn")
+
     plt.rc('text', usetex=True)
     plt.rc('font', family='serif')
 
@@ -116,12 +111,9 @@ def line_plot(data, show=True, skip=0, start=1):
     x = hist[1][skip:-1]
     y = hist[0][skip:]
 
-    # popt, _ = curve_fit(exp_curve, x, y)
-
     if show:
         plt.yscale("log")
         plt.plot(x, y, marker='.', ls=' ')
-        # plt.plot(x, exp_curve(x, *popt), c='r', label="Fitted Curve")
 
         plt.ylabel('Probability of Death')
         plt.xlabel('Time Survived (no. of steps)')
@@ -132,7 +124,7 @@ def line_plot(data, show=True, skip=0, start=1):
 
 def cum_line_plot(data, show=True, skip=0, start=1):
     nbins = int(int(max(data) - start)/2)
-    # plt.style.use("seaborn")
+
     plt.rc('text', usetex=True)
     plt.rc('font', family='serif')
 
@@ -179,7 +171,8 @@ def average_value(dimen, iteration, maxSteps=0, prob=0.1, potential="", boundary
                   potential=potential,
                   boundary=boundary)
         data = np.loadtxt("data.dat")
-        prob_arrest_cum_line = cum_line_plot(data, show=False, skip=skip, start=boundary)
+        prob_arrest_cum_line = cum_line_plot(
+            data, show=False, skip=skip, start=boundary)
         values.append(prob_arrest_cum_line * boundary**2)
 
     items = np.array(values)
@@ -196,7 +189,6 @@ def compare_boundaries(start, repeats):
     maxSteps = 0
     potential = "square"
     boundary = start
-    prob = 0.1
 
     alldataX = []
     alldataY = []
@@ -219,7 +211,7 @@ def compare_boundaries(start, repeats):
         skip = 100
 
         nbins = int(int(max(data) - start)/2)
-        plt.rc('text', usetex=True)
+        # plt.rc('text', usetex=True)
         plt.rc('font', family='serif')
 
         hist = plt.hist(data, nbins, normed=True)
@@ -239,7 +231,8 @@ def compare_boundaries(start, repeats):
 
         popt, _ = curve_fit(exp_curve, alldataX[i], cum_y, p0=[1.28, 0.019])
 
-        label = labels[i] + r", $\lambda J^2$: " + str(popt[1] * allboundaries[i]**2)[:6]
+        label = labels[i] + r", $\lambda J^2$: " + \
+            str(popt[1] * allboundaries[i]**2)[:6]
 
         plt.yscale("log")
         plt.plot(alldataX[i], cum_y, marker='.', ls=' ', label=label)
@@ -253,7 +246,7 @@ def compare_boundaries(start, repeats):
     plt.show()
 
 
-def spatial_plot(data, dimen, show=True, bins=100):
+def spatial_plot(dimen, show=True, bins=100, sigma=16):
     nbins = bins
 
     positions = np.loadtxt("positions.dat")
@@ -263,30 +256,36 @@ def spatial_plot(data, dimen, show=True, bins=100):
     for i in pos:
         x_pos.append(i[0])
         y_pos.append(i[1])
-    
+
     plt.rc('text', usetex=True)
     plt.rc('font', family='serif')
 
     if show:
 
-        plt.hist2d(x_pos, y_pos, bins=nbins)
+        heatmap, xedges, yedges = np.histogram2d(x_pos, y_pos, bins=nbins)
+        heatmap = gaussian_filter(heatmap, sigma=sigma)
+        extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+
+        img = heatmap.T
+        plt.imshow(img, extent=extent, origin="lower", cmap=cm.jet)
+
         plt.ylabel('y Coordinate')
         plt.xlabel('x Coordinate')
-        plt.tight_layout()
+        # plt.tight_layout()
 
         plt.show()
-
-    return pos
 
 
 if __name__ == "__main__":
 
-    dimen = 1
+    dimen = 2
     iteration = 1000000
     maxSteps = 0
-    potential = "square"
+    potential = "circle"
     boundary = 20
     prob = 0.1
+    randomise = 1
+    energy = 2
 
     # constant potential
     if potential == "":
@@ -305,12 +304,15 @@ if __name__ == "__main__":
         data = np.loadtxt("data.dat")
         exp_plot(data, show=True, skip=0, start=boundary)
         line_plot(data, show=True, skip=0, start=boundary)
-        prob_arrest_cum_curve = cum_exp_plot(data, show=True, skip=100, start=boundary)
-        prob_arrest_cum_line = cum_line_plot(data, show=True, skip=100, start=boundary)
+        prob_arrest_cum_curve = cum_exp_plot(
+            data, show=True, skip=100, start=boundary)
+        prob_arrest_cum_line = cum_line_plot(
+            data, show=True, skip=100, start=boundary)
 
         print(prob_arrest_cum_line * boundary**2)
 
-        avg, error = average_value(1, 1000000, maxSteps=0, prob=0.1, potential="square", boundary=20, skip=100, repeats=10)
+        avg, error = average_value(
+            1, 1000000, maxSteps=0, prob=0.1, potential="square", boundary=20, skip=100, repeats=10)
         print(avg, " ± ", error[1])
 
         compare_boundaries(14, 4)
@@ -321,10 +323,8 @@ if __name__ == "__main__":
                   iteration,
                   maxSteps=maxSteps,
                   potential=potential,
-                  boundary=boundary)
-        data = np.loadtxt("data.dat")
+                  boundary=boundary,
+                  randomise=randomise,
+                  energy=energy)
 
-        prob_arrest_cum_line = cum_line_plot(data, show=True, skip=100, start=boundary)
-        print(prob_arrest_cum_line * boundary**2)
-
-        spatial_plot(data, dimen, show=True, bins=100)
+        spatial_plot(dimen, show=True, bins=100, sigma=4)
