@@ -1,0 +1,5 @@
+/Paper/*
+!/Paper/images/
+!/Paper/main.tex
+!/Paper/main.pdf
+!/Paper/random_walk.bib
