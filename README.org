@@ -34,4 +34,4 @@ execute the file yourself.
 - SciPy Python module
 
 * License
-* Acknowledgements
+This project is licensed under the terms of the MIT license. Do whatever you want with it!
