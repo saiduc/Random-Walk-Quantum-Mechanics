@@ -2,7 +2,7 @@
 #+AUTHOR: Sai Pandian
 
 This repository hosts my project for the PHYS6017 Computer Techniques in Physics
-module, which I completed as part of my MPhys Astrophysics degree. The project
+module, which I completed as part of my BSc Physics degree. The project
 entailed using Random Walk Monte Carlo simulations to determine the ground state
 energy of different Quantum systems.
 
